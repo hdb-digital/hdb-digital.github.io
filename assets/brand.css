@@ -1,0 +1,89 @@
+/* Nhận diện HDBank theo "Guideline thiết kế HDBank" (rút từ HDBank Playbook v1).
+   File dùng chung cho 3 trang hdb-digital.cloud; mỗi repo giữ một bản sao trong assets/. Sửa ở home_site rồi chép sang site/ và qr_site/.
+   - Chỉ dùng 5 màu thương hiệu và sắc độ 10–100% của chúng (sắc độ = pha với trắng).
+   - Dải màu chủ đạo chạy từ dưới lên: cam vàng ở đáy → cam → đỏ chiếm ~2/3 phía trên.
+   - Logo dương bản, góc trên trái, trên nền trắng; vùng an toàn ≈ chiều cao chữ "H"; rộng tối thiểu 55 px.
+   - Tiêu đề: BauhausVO / Myriad Pro Bold; nội dung: Myriad Pro. Trên web dùng Source Sans 3 (cùng họ Adobe) khi máy không có. */
+:root {
+  color-scheme: light;
+  --red: #da2128; --gray: #58595b; --orange: #faa61a; --amber: #ffc20e; --yellow: #ffdd00;
+  --red-10: #fbe9ea; --red-20: #f8d3d4;
+  --gray-10: #eeeeef; --gray-20: #dedede; --gray-30: #cdcdce; --gray-50: #acacad; --gray-70: #8a8b8c;
+  --orange-10: #fef6e9; --orange-20: #feedd1; --amber-20: #fff3d0; --yellow-20: #fff8cc;
+  --ink: #000000; --ink2: var(--gray); --line: var(--gray-20); --page: var(--gray-10); --surface: #ffffff;
+  --grad: linear-gradient(180deg, var(--red) 0%, var(--red) 58%, var(--orange) 86%, var(--amber) 100%);
+  --font: "Myriad Pro", "Source Sans 3", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+  --font-head: "BauhausVO", "Myriad Pro", "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --shadow: 0 1px 2px rgba(88, 89, 91, .10), 0 6px 20px rgba(88, 89, 91, .10);
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--page); color: var(--ink); font: 15px/1.5 var(--font); }
+a { color: var(--red); }
+:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+.wrap { max-width: 1240px; margin: 0 auto; padding-inline: max(16px, env(safe-area-inset-left, 0px)); }
+
+/* ---- Thanh đầu trang: logo góc trên trái trên nền trắng, điều hướng bên phải ---- */
+.site-head { background: var(--surface); border-bottom: 1px solid var(--line); }
+.site-head .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 68px; }
+.site-head .logo { display: block; flex: none; padding: 18px 18px 18px 0; } /* vùng an toàn ≈ chiều cao chữ H */
+.site-head .logo img { display: block; height: 30px; width: auto; }
+.site-nav { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; }
+.site-nav a {
+  white-space: nowrap; text-decoration: none; color: var(--gray); font-weight: 600; font-size: 15px;
+  padding: 8px 12px; border-radius: 8px;
+}
+.site-nav a:hover { color: var(--red); background: var(--red-10); }
+.site-nav a[aria-current="page"] { color: var(--red); box-shadow: inset 0 -3px 0 var(--red); border-radius: 8px 8px 0 0; }
+
+/* ---- Dải tiêu đề trang: nền dải màu + đồ họa cánh diều đôi phóng lớn, cắt mép khung ---- */
+.band { position: relative; overflow: hidden; color: #fff; background: var(--grad); isolation: isolate; }
+.band::after {
+  content: ""; position: absolute; z-index: -1; top: 0; right: 0; bottom: 0; width: min(58%, 760px);
+  background: url("kite.jpg") left top / cover no-repeat;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 45%); mask-image: linear-gradient(90deg, transparent 0%, #000 45%);
+}
+.band .wrap { position: relative; padding-block: 28px 34px; }
+.band h1 { margin: 0; font: 700 clamp(24px, 3.2vw, 32px)/1.2 var(--font-head); letter-spacing: 0; max-width: 22em; }
+.band .sub { margin: 6px 0 0; font-size: 15px; color: #fff; max-width: 46em; }
+
+/* ---- Tiêu đề mục kiểu playbook: chữ trắng đậm trên thanh đỏ ---- */
+.section-bar {
+  display: inline-block; margin: 0 0 14px; padding: 8px 16px; border-radius: 8px;
+  background: var(--red); color: #fff; font: 700 20px/1.25 var(--font-head);
+}
+
+/* ---- Nút ---- */
+.btn {
+  font: inherit; font-weight: 700; border-radius: 10px; padding: 11px 14px; cursor: pointer;
+  border: 1.5px solid var(--red); background: var(--surface); color: var(--red);
+}
+.btn.primary { background: var(--red); color: #fff; }
+.btn:hover:not(:disabled) { background: var(--red-10); }
+.btn.primary:hover:not(:disabled) { background: var(--red); box-shadow: 0 4px 14px rgba(218, 33, 40, .35); }
+.btn:disabled { opacity: .4; cursor: not-allowed; }
+
+/* ---- Icon cấp 1: hình trắng trong khối vuông bo góc, nền dải màu ---- */
+.icon1 {
+  width: 56px; height: 56px; border-radius: 22%; display: grid; place-items: center; color: #fff;
+  background: linear-gradient(180deg, var(--red) 0%, var(--red) 45%, var(--orange) 82%, var(--amber) 100%);
+  box-shadow: 0 4px 12px rgba(218, 33, 40, .25);
+}
+.icon1 svg { width: 30px; height: 30px; }
+
+/* ---- Footer: dải màu thương hiệu (≤ 10% trang), chữ trắng, hotline + website ---- */
+.site-foot { background: var(--grad); color: #fff; margin-top: 40px; }
+.site-foot .wrap { display: flex; flex-wrap: wrap; gap: 6px 24px; justify-content: space-between; padding-block: 16px 30px; font-size: 14px; }
+.site-foot a { color: #fff; font-weight: 700; text-decoration: none; }
+.site-foot a:hover { text-decoration: underline; }
+.site-foot b { font-weight: 700; }
+
+@media (max-width: 640px) {
+  .site-head .wrap { min-height: 56px; gap: 8px; }
+  .site-head .logo { padding: 14px 8px 14px 0; }
+  .site-head .logo img { height: 24px; } /* ≈ 90 px rộng, trên mức tối thiểu 55 px */
+  .site-nav a { padding: 6px 8px; font-size: 14px; }
+  .site-nav .long { display: none; }
+  .band::after { width: 70%; opacity: .9; background-image: url("kite-sm.jpg"); }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
