@@ -5,66 +5,163 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>HDBank Digital</title>
 <meta name="robots" content="noindex">
+<meta name="theme-color" content="#dc2c29">
+<link rel="icon" type="image/png" href="/assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700;800&display=swap">
 <style>
+/* Nhận diện HDBank theo template slide: đỏ DC2C29, cam F7941D, vàng FFC20E, xám 4D4F4F.
+   Template dùng Myriad Pro; trên web thay bằng Source Sans 3 (cùng họ, của Adobe, đủ tiếng Việt). */
 :root {
   color-scheme: light;
-  --page: #f9f9f7; --surface: #fcfcfb; --ink: #0b0b0b; --ink2: #52514e; --muted: #898781;
-  --border: rgba(11,11,11,.10); --hover: rgba(11,11,11,.04); --brand: #b5121b; --link: #1c5cab;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    color-scheme: dark;
-    --page: #0d0d0d; --surface: #1a1a19; --ink: #ffffff; --ink2: #c3c2b7; --muted: #898781;
-    --border: rgba(255,255,255,.10); --hover: rgba(255,255,255,.05); --link: #86b6ef;
-  }
-}
-:root[data-theme="dark"] {
-  color-scheme: dark;
-  --page: #0d0d0d; --surface: #1a1a19; --ink: #ffffff; --ink2: #c3c2b7; --muted: #898781;
-  --border: rgba(255,255,255,.10); --hover: rgba(255,255,255,.05); --link: #86b6ef;
+  --red: #dc2c29; --red-dark: #b81f1c; --orange: #f7941d; --yellow: #ffc20e; --gray: #4d4f4f;
+  --ink: #1f2121; --muted: #6f7272; --line: #e7e5e1; --page: #f6f5f3; --card: #ffffff;
+  --brand-grad: linear-gradient(90deg, var(--yellow) 0%, var(--orange) 35%, var(--red) 75%);
+  --font: "Myriad Pro", "Source Sans 3", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
 }
 * { box-sizing: border-box; }
-body {
-  margin: 0; background: var(--page); color: var(--ink);
-  font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--page); color: var(--ink); font: 16px/1.5 var(--font); }
+.wrap { max-width: 1120px; margin: 0 auto; padding-inline: max(16px, env(safe-area-inset-left, 0px)); }
+
+/* ---- Bìa: nền slide bìa HDBank (logo vàng + khẩu hiệu nằm sẵn trên dải đầu ảnh) ---- */
+.hero {
+  position: relative; color: #fff; background: var(--red) url("/assets/cover-sm.jpg") center top / cover no-repeat;
+  min-height: clamp(380px, 46vw, 560px); display: flex; align-items: center;
+  padding-top: clamp(64px, 6.5vw, 72px); padding-bottom: 96px;
 }
-.wrap { max-width: 880px; margin: 0 auto; padding-inline: 16px; }
-header.top { border-top: 4px solid var(--brand); background: var(--surface); border-bottom: 1px solid var(--border); }
-header.top .wrap { padding-block: 18px; }
-h1 { font-size: 20px; margin: 0; font-weight: 650; letter-spacing: -.01em; }
-.sub { color: var(--ink2); font-size: 13px; margin-top: 2px; }
-main .wrap { padding-block: 24px 48px; }
-.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+@media (min-width: 900px), (min-resolution: 2dppx) and (min-width: 480px) {
+  .hero { background-image: url("/assets/cover.jpg"); }
+}
+.hero .wrap { width: 100%; }
+.eyebrow {
+  display: inline-block; font-weight: 700; font-size: 13px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--yellow); margin-bottom: 10px;
+}
+.hero h1 {
+  margin: 0; font-weight: 800; text-transform: uppercase; letter-spacing: .01em; line-height: 1.12;
+  font-size: clamp(30px, 5vw, 56px); max-width: 16em; text-shadow: 0 2px 18px rgba(120, 0, 0, .25);
+}
+.hero p.lead { margin: 14px 0 0; font-size: clamp(16px, 1.6vw, 19px); max-width: 36em; color: rgba(255,255,255,.92); }
+
+/* ---- Thanh tiêu đề kiểu slide master: logo trên nền trắng + dải đỏ có vệt cam/vàng ---- */
+.section-head {
+  display: flex; align-items: stretch; height: 64px; border-radius: 12px; overflow: hidden;
+  background: var(--card); box-shadow: 0 6px 24px rgba(77, 79, 79, .12);
+}
+.section-head .logo { flex: none; display: flex; align-items: center; padding: 0 20px 0 22px; }
+.section-head .logo img { height: 30px; width: auto; display: block; }
+.section-head .bar {
+  flex: 1; display: flex; align-items: center; padding-left: clamp(96px, 16vw, 210px); padding-right: 20px;
+  background: url("/assets/bar.png") left center / auto 100% no-repeat, var(--red);
+  border-top-left-radius: 14px;
+}
+.section-head h2 { margin: 0; color: #fff; font-size: 22px; font-weight: 700; white-space: nowrap; }
+main { margin-top: -56px; position: relative; padding-bottom: 56px; }
+
+/* ---- Thẻ công cụ ---- */
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px; }
 a.card {
-  display: block; text-decoration: none; color: inherit;
-  background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px;
+  position: relative; display: flex; flex-direction: column; text-decoration: none; color: inherit;
+  background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 26px 24px 22px; overflow: hidden;
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
 }
-a.card:hover { background: var(--hover); }
-a.card:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
-.card h2 { font-size: 16px; margin: 0 0 4px; font-weight: 650; color: var(--link); }
-.card p { margin: 0; color: var(--ink2); }
+a.card::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 4px; background: var(--brand-grad); }
+a.card:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(220, 44, 41, .14); border-color: rgba(220, 44, 41, .35); }
+a.card:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
+.card .icon {
+  width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center; color: #fff;
+  background: linear-gradient(135deg, var(--orange), var(--red));
+}
+.card .icon svg { width: 28px; height: 28px; }
+.card h3 { margin: 16px 0 6px; font-size: 22px; line-height: 1.25; font-weight: 700; color: var(--red); }
+.card p { margin: 0; color: var(--gray); }
+.card ul { margin: 14px 0 0; padding: 0; list-style: none; color: var(--gray); font-size: 15px; }
+.card li { position: relative; padding-left: 18px; margin-top: 6px; }
+.card li::before {
+  content: ""; position: absolute; left: 2px; top: .62em; width: 7px; height: 7px; border-radius: 2px;
+  background: var(--orange); transform: rotate(45deg);
+}
+.card .go {
+  margin-top: auto; padding-top: 20px; font-weight: 700; color: var(--red);
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.card .go span { transition: transform .15s ease; }
+a.card:hover .go span { transform: translateX(4px); }
+
+/* ---- Chân trang ---- */
+footer { background: var(--card); border-top: 1px solid var(--line); position: relative; }
+footer::before { content: ""; position: absolute; inset: -4px 0 auto 0; height: 4px; background: var(--brand-grad); }
+footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: center; justify-content: space-between; padding-block: 20px; }
+footer img { height: 26px; width: auto; display: block; }
+footer small { color: var(--muted); font-size: 13px; }
+
+@media (max-width: 560px) {
+  .hero { padding-bottom: 88px; }
+  .section-head { height: 54px; }
+  .section-head .logo { padding: 0 12px 0 14px; }
+  .section-head .logo img { height: 22px; }
+  .section-head .bar { padding-left: 72px; }
+  .section-head h2 { font-size: 18px; }
+  .cards { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 </head>
 <body>
-<header class="top">
+<header class="hero">
   <div class="wrap">
-    <h1>HDBank Digital</h1>
-    <div class="sub">Công cụ nội bộ cho hệ thống chi nhánh / PGD trên Google Maps</div>
+    <div class="eyebrow">HDBank Digital</div>
+    <h1>Công cụ số cho hệ thống chi nhánh &amp; PGD</h1>
+    <p class="lead">Theo dõi đánh giá trên Google Maps và tạo ấn phẩm mã QR dẫn đường cho từng chi nhánh, phòng giao dịch.</p>
   </div>
 </header>
+
 <main>
   <div class="wrap">
+    <div class="section-head">
+      <div class="logo"><img src="/assets/logo.png" alt="HDBank" width="141" height="38"></div>
+      <div class="bar"><h2>Công cụ</h2></div>
+    </div>
+
     <div class="cards">
       <a class="card" href="/hdbank-gmaps-dashboard/">
-        <h2>Dashboard đánh giá Google Maps</h2>
-        <p>Điểm, số lượt và nội dung đánh giá của từng CN/PGD.</p>
+        <div class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.3l-5.8 3.1 1.1-6.5L2.6 9.3l6.5-.9z"/></svg>
+        </div>
+        <h3>Dashboard đánh giá Google Maps</h3>
+        <p>Điểm và nội dung đánh giá của từng CN/PGD HDBank trên Google Maps.</p>
+        <ul>
+          <li>Điểm trung bình, số lượt và phân bổ số sao</li>
+          <li>Lọc theo thời gian, tỉnh/thành phố, loại địa điểm</li>
+          <li>Đánh giá chi tiết kèm phản hồi của HDBank</li>
+        </ul>
+        <div class="go">Mở dashboard <span aria-hidden="true">→</span></div>
       </a>
+
       <a class="card" href="/hdbank-qr-maps/">
-        <h2>Tạo mã QR Google Maps</h2>
-        <p>Thiết kế standee, thẻ để bàn, sticker có mã QR dẫn tới Google Maps.</p>
+        <div class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v.01M14 20h.01M17 20h4v-3"/></svg>
+        </div>
+        <h3>Tạo mã QR Google Maps</h3>
+        <p>Thiết kế ấn phẩm có mã QR dẫn khách tới đúng địa điểm trên Google Maps.</p>
+        <ul>
+          <li>3 mẫu: standee A5, thẻ để bàn A6, sticker 100×100 mm</li>
+          <li>Chọn sẵn vùng và chi nhánh/PGD trong danh sách</li>
+          <li>Xuất PNG 300 dpi, SVG hoặc in / lưu PDF</li>
+        </ul>
+        <div class="go">Tạo mã QR <span aria-hidden="true">→</span></div>
       </a>
     </div>
   </div>
 </main>
+
+<footer>
+  <div class="wrap">
+    <img src="/assets/logo.png" alt="HDBank" width="98" height="26">
+    <small>Trang nội bộ · Số liệu đánh giá lấy từ Google Maps công khai</small>
+  </div>
+</footer>
 </body>
 </html>
