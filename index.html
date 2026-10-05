@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HDBank Digital</title>
+<meta name="robots" content="noindex">
+<style>
+:root {
+  color-scheme: light;
+  --page: #f9f9f7; --surface: #fcfcfb; --ink: #0b0b0b; --ink2: #52514e; --muted: #898781;
+  --border: rgba(11,11,11,.10); --hover: rgba(11,11,11,.04); --brand: #b5121b; --link: #1c5cab;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --page: #0d0d0d; --surface: #1a1a19; --ink: #ffffff; --ink2: #c3c2b7; --muted: #898781;
+    --border: rgba(255,255,255,.10); --hover: rgba(255,255,255,.05); --link: #86b6ef;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0d0d0d; --surface: #1a1a19; --ink: #ffffff; --ink2: #c3c2b7; --muted: #898781;
+  --border: rgba(255,255,255,.10); --hover: rgba(255,255,255,.05); --link: #86b6ef;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--page); color: var(--ink);
+  font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+.wrap { max-width: 880px; margin: 0 auto; padding-inline: 16px; }
+header.top { border-top: 4px solid var(--brand); background: var(--surface); border-bottom: 1px solid var(--border); }
+header.top .wrap { padding-block: 18px; }
+h1 { font-size: 20px; margin: 0; font-weight: 650; letter-spacing: -.01em; }
+.sub { color: var(--ink2); font-size: 13px; margin-top: 2px; }
+main .wrap { padding-block: 24px 48px; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+a.card {
+  display: block; text-decoration: none; color: inherit;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px;
+}
+a.card:hover { background: var(--hover); }
+a.card:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+.card h2 { font-size: 16px; margin: 0 0 4px; font-weight: 650; color: var(--link); }
+.card p { margin: 0; color: var(--ink2); }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <h1>HDBank Digital</h1>
+    <div class="sub">Công cụ nội bộ cho hệ thống chi nhánh / PGD trên Google Maps</div>
+  </div>
+</header>
+<main>
+  <div class="wrap">
+    <div class="cards">
+      <a class="card" href="/hdbank-gmaps-dashboard/">
+        <h2>Dashboard đánh giá Google Maps</h2>
+        <p>Điểm, số lượt và nội dung đánh giá của từng CN/PGD.</p>
+      </a>
+      <a class="card" href="/hdbank-qr-maps/">
+        <h2>Tạo mã QR Google Maps</h2>
+        <p>Thiết kế standee, thẻ để bàn, sticker có mã QR dẫn tới Google Maps.</p>
+      </a>
+    </div>
+  </div>
+</main>
+</body>
+</html>
