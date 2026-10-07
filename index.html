@@ -3,122 +3,891 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>HDBank Digital</title>
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#da2128">
+<title>HDBank Digital</title>
+<meta name="description" content="HDB Digital Hub: công cụ số do đội Digital Marketing HDBank phát triển cho chi nhánh, phòng giao dịch và các đơn vị.">
 <link rel="icon" type="image/png" href="/assets/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700;800&display=swap">
-<link rel="stylesheet" href="/assets/brand.css">
+<!-- Font thương hiệu: BauhausVO (tiêu đề) và Myriad Pro (nội dung).
+     Máy nào đã cài font gốc sẽ dùng font gốc; nếu không, trình duyệt dùng font web gần nhất có hỗ trợ tiếng Việt:
+     Quicksand thay BauhausVO, Source Sans 3 (cùng nhà thiết kế Adobe, rất gần Myriad) thay Myriad Pro. -->
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <style>
-/* KV trang chủ: dải màu + cánh diều đôi, headline trắng/vàng đặt cao trong khung */
-.hero .wrap { padding-block: clamp(40px, 6vw, 72px) clamp(48px, 7vw, 88px); }
-.hero .eyebrow { font-weight: 700; font-size: 14px; letter-spacing: .12em; text-transform: uppercase; color: var(--yellow); }
-.hero h1 { margin: 8px 0 0; font: 800 clamp(32px, 5.2vw, 58px)/1.1 var(--font-head); text-transform: uppercase; max-width: 14em; }
-.hero h1 em { font-style: normal; color: var(--yellow); }
-.hero p { margin: 16px 0 0; font-size: clamp(16px, 1.6vw, 19px); max-width: 34em; }
-.hero .cta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
-.hero .cta a { text-decoration: none; }
-.btn.light { background: #fff; color: var(--red); border-color: #fff; }
-.btn.light:hover { background: var(--red-10); }
-.btn.ghost { background: transparent; color: #fff; border-color: #fff; }
-.btn.ghost:hover { background: rgba(255, 255, 255, .14); }
+/* =========================================================
+   TOKENS — lấy từ HDBank Digital Playbook (mục 2.a–2.j)
+   ========================================================= */
+:root{
+  --red:#DA2128;          /* Đỏ HDBank — màu chủ đạo */
+  --grey:#58595B;         /* Xám HDBank (CMYK 0-0-0-80) */
+  --orange:#FAA61A;       /* Cam HDBank */
+  --amber:#FFC20E;        /* Cam Vàng HDBank */
+  --yellow:#FFDD00;       /* Vàng HDBank */
 
-main .wrap { padding-block: 32px 8px; }
-.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 20px; }
-a.card {
-  display: flex; flex-direction: column; text-decoration: none; color: inherit;
-  background: var(--surface); border-radius: 14px; padding: 24px; box-shadow: var(--shadow);
-  border-top: 4px solid var(--red); transition: transform .15s ease, box-shadow .15s ease;
+  /* Thang sắc độ (tint) theo bước 10% của playbook */
+  --red-10:#FBE9EA;
+  --grey-10:#EEEEEF; --grey-20:#DEDEDE; --grey-40:#BCBCBD; --grey-60:#9B9B9D;
+  --orange-10:#FEF6E8;
+
+  --white:#FFFFFF;
+
+  --font-head:"BauhausVO","Quicksand","Segoe UI",system-ui,sans-serif;
+  --font-body:"Myriad Pro","Source Sans 3","Segoe UI",system-ui,Arial,sans-serif;
+
+  /* Chân KV: dải màu dưới lên (Cam-Vàng → Cam → Đỏ) chiếm tối đa ~10–15% chiều cao, phía trên là đỏ đặc (KV 2.e) */
+  --kv-band:linear-gradient(0deg,var(--amber) 0%,var(--orange) 4%,var(--red) 15%,var(--red) 100%);
+  /* Dải trái → phải (Cam → Đỏ) cho dải mảnh chân khối */
+  --band-lr:linear-gradient(90deg,var(--orange) 0%,var(--red) 100%);
+  /* Nền icon cấp 1: dải màu thương hiệu dưới lên */
+  --icon-bg:linear-gradient(0deg,var(--amber) 0%,var(--orange) 24%,var(--red) 68%);
+
+  /* Bóng đổ nhẹ, tạo chiều sâu nổi 3D (KV 2.e) */
+  --lift:0 1px 2px rgba(88,89,91,.10),0 10px 24px -12px rgba(88,89,91,.30),0 36px 72px -32px rgba(110,10,16,.40);
+
+  --wrap:1180px;
+  --gutter:clamp(16px,4vw,40px);
 }
-a.card:hover { transform: translateY(-3px); box-shadow: 0 2px 4px rgba(88, 89, 91, .12), 0 14px 32px rgba(218, 33, 40, .16); }
-.card h3 { margin: 16px 0 6px; font: 700 22px/1.25 var(--font-head); color: var(--ink); }
-.card p { margin: 0; color: var(--gray); }
-.card ul { margin: 14px 0 0; padding: 0; list-style: none; color: var(--gray); }
-.card li { position: relative; padding-left: 18px; margin-top: 6px; }
-.card li::before { content: ""; position: absolute; left: 2px; top: .6em; width: 7px; height: 7px; border-radius: 2px; background: var(--orange); transform: rotate(45deg); }
-.card .go { margin-top: auto; padding-top: 18px; font-weight: 700; color: var(--red); }
-.card .go span { display: inline-block; transition: transform .15s ease; }
-a.card:hover .go span { transform: translateX(4px); }
+
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--white);color:var(--grey);
+  font-family:var(--font-body);font-size:18px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+}
+img,svg{display:block;max-width:100%}
+a{color:inherit}
+h1,h2,h3,h4{font-family:var(--font-head);font-weight:700;line-height:1.15;margin:0;color:var(--grey)}
+p{margin:0}
+ul,ol{margin:0;padding:0;list-style:none}
+:focus-visible{outline:3px solid var(--red);outline-offset:3px;border-radius:6px}
+/* Trên nền đỏ dùng viền trắng; khối nền trắng nằm trong vùng đỏ quay lại viền đỏ */
+.hero :focus-visible,.propose :focus-visible,.tabbar :focus-visible{outline-color:var(--white)}
+.launcher-top :focus-visible,.launcher-group :focus-visible,.form-card :focus-visible{outline-color:var(--red)}
+/* Header dính trên cùng cao 76px (64px trên điện thoại): chừa chỗ khi nhảy tới mục */
+section[id]{scroll-margin-top:88px}
+.skip-link{
+  position:absolute;left:16px;top:-80px;z-index:100;background:var(--red);color:var(--white);
+  padding:12px 20px;border-radius:999px;font-weight:700;text-decoration:none;transition:top .2s;
+}
+.skip-link:focus{top:12px;outline-color:var(--amber)}
+.visually-hidden{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{max-width:var(--wrap);margin:0 auto;padding-left:var(--gutter);padding-right:var(--gutter)}
+.sprite{position:absolute;width:0;height:0;overflow:hidden}
+
+/* ---------- Nút ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  min-height:48px;padding:0 24px;border-radius:999px;border:2px solid transparent;
+  font:600 17px/1 var(--font-body);text-decoration:none;cursor:pointer;
+  transition:background-color .2s,color .2s,border-color .2s,transform .2s,box-shadow .2s;
+}
+.btn svg{width:18px;height:18px;flex:none}
+.btn-red{background:var(--red);color:var(--white)}
+.btn-red:hover{box-shadow:0 10px 22px -10px rgba(218,33,40,.7);transform:translateY(-1px)}
+.btn-white{background:var(--white);color:var(--red)}
+.btn-white:hover{box-shadow:0 12px 26px -12px rgba(0,0,0,.45);transform:translateY(-1px)}
+.btn-ghost{border-color:rgba(255,255,255,.7);color:var(--white)}
+.btn-ghost:hover{background:rgba(255,255,255,.12);border-color:var(--white)}
+.btn-outline{border-color:var(--red);color:var(--red)}
+.btn-outline:hover{background:var(--red-10)}
+
+/* =========================================================
+   HEADER — nền trắng, logo dương bản góc trái
+   ========================================================= */
+.site-header{
+  position:sticky;top:0;z-index:50;background:rgba(255,255,255,.96);
+  backdrop-filter:saturate(1.4) blur(8px);-webkit-backdrop-filter:saturate(1.4) blur(8px);
+  transition:box-shadow .25s;
+}
+.site-header.is-scrolled{box-shadow:0 1px 0 var(--grey-10),0 8px 24px -16px rgba(88,89,91,.4)}
+.header-inner{display:flex;align-items:center;gap:24px;height:76px}
+.brand{display:flex;align-items:center;gap:18px;text-decoration:none;flex:none}
+/* Logo gốc của HDBank — không vẽ lại. Vùng an toàn ≈ chiều cao chữ H được giữ bằng padding. */
+.brand-logo{height:38px;width:auto;min-width:55px;padding:4px 0}
+.brand-name{
+  font-family:var(--font-head);font-weight:700;font-size:17px;color:var(--grey);
+  padding-left:18px;border-left:1px solid var(--grey-20);line-height:1.1;white-space:nowrap;
+}
+.nav{display:flex;align-items:center;gap:4px;margin-left:auto}
+.nav a{
+  text-decoration:none;font-weight:600;font-size:16px;color:var(--grey);
+  padding:10px 14px;border-radius:999px;transition:color .2s,background-color .2s;
+}
+.nav a:hover{color:var(--red);background:var(--red-10)}
+.nav .btn{margin-left:10px;min-height:42px;padding:0 20px;font-size:16px;gap:0}
+.nav .btn:hover{color:var(--white);background:var(--red)}
+
+/* =========================================================
+   HERO — nền đỏ + chân KV dải màu, cánh diều đôi
+   ========================================================= */
+.hero{position:relative;overflow:hidden;background:var(--kv-band);color:var(--white);isolation:isolate}
+.hero-kites{
+  position:absolute;z-index:-1;right:-3%;width:min(60vw,800px);height:min(60vw,800px);
+  top:calc(50% - min(30vw,400px));pointer-events:none;
+}
+.hero-inner{
+  display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(32px,5vw,72px);
+  align-items:center;padding-top:clamp(56px,8vw,104px);padding-bottom:clamp(64px,9vw,120px);
+}
+.hero h1{
+  color:var(--white);font-size:clamp(40px,5.4vw,70px);line-height:1.04;letter-spacing:-.015em;
+  max-width:13ch;text-wrap:balance;
+}
+.hero-lead{margin-top:28px;max-width:34em;font-size:clamp(18px,1.5vw,20px);line-height:1.6;color:rgba(255,255,255,.94)}
+.hero-actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:36px}
+
+/* ---- Launcher: màn hình "app" mở nhanh công cụ (theo hệ icon & màn hình app 2.g–2.j) ---- */
+.launcher{
+  justify-self:end;width:100%;max-width:392px;background:var(--white);color:var(--grey);
+  border-radius:30px;box-shadow:var(--lift),0 0 0 8px rgba(255,255,255,.14);overflow:hidden;
+}
+.launcher-top{padding:26px 24px 8px}
+.launcher-hello{font-family:var(--font-head);font-weight:700;font-size:21px;line-height:1.25;color:var(--grey)}
+.launcher-meta{display:flex;align-items:center;gap:8px;margin-top:6px;font-size:15px;color:var(--grey)}
+.live-dot{width:8px;height:8px;border-radius:50%;background:#2E9E5B;box-shadow:0 0 0 4px rgba(46,158,91,.16);flex:none}
+.launcher-group{padding:14px 18px 6px}
+.launcher-group + .launcher-group{border-top:1px solid var(--grey-10);margin-top:8px;padding-top:16px}
+.launcher-label{font-size:14px;font-weight:600;color:var(--grey);padding:0 6px 10px}
+.app-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.app{
+  display:flex;flex-direction:column;align-items:center;gap:8px;padding:10px 4px 12px;border-radius:18px;
+  text-decoration:none;color:var(--grey);text-align:center;transition:background-color .2s;position:relative;
+}
+a.app:hover{background:var(--red-10)}
+a.app:hover .icon1{transform:translateY(-3px);box-shadow:0 14px 22px -10px rgba(218,33,40,.65)}
+.app-name{font-size:12px;line-height:1.3;font-weight:600;max-width:10.5em} /* nhãn size 12, ≤ 20 ký tự */
+.app.is-soon .icon1{opacity:.5}
+.app.is-soon .app-name{color:var(--grey)}
+
+/* Icon cấp 1: biểu tượng trắng trong khối vuông bo góc kiểu icon app iPhone, nền dải màu thương hiệu */
+.icon1{
+  --s:60px;width:var(--s);height:var(--s);border-radius:calc(var(--s)*.2237);
+  background:var(--icon-bg);display:grid;place-items:center;flex:none;
+  box-shadow:0 8px 16px -10px rgba(218,33,40,.6),inset 0 1px 0 rgba(255,255,255,.25);
+  transition:transform .2s,box-shadow .2s;
+}
+.icon1 svg{width:56%;height:56%;fill:var(--white)}
+
+/* Thanh tab đỏ + nút QR nổi ở giữa (màn hình app mẫu) */
+.tabbar{
+  position:relative;margin-top:14px;background:var(--red);color:var(--white);
+  display:grid;grid-template-columns:repeat(5,1fr);align-items:end;padding:10px 6px 12px;
+}
+.tab{
+  display:flex;flex-direction:column;align-items:center;gap:5px;text-decoration:none;
+  font-size:12px;font-weight:600;line-height:1.1;color:rgba(255,255,255,.88);padding:2px 0;border-radius:10px;
+}
+.tab svg{width:22px;height:22px;fill:currentColor}
+.tab:hover{color:var(--white)}
+.tab-qr .qr-float{
+  width:58px;height:58px;border-radius:50%;margin-top:-34px;display:grid;place-items:center;
+  background:var(--icon-bg);border:4px solid var(--white);box-shadow:0 10px 18px -8px rgba(0,0,0,.45);
+  transition:transform .2s;
+}
+.tab-qr .qr-float svg{width:26px;height:26px;fill:var(--white)}
+.tab-qr:hover .qr-float{transform:translateY(-3px)}
+
+/* Khoảnh khắc chuyển động duy nhất: cánh diều bay lên & launcher nổi lên khi tải trang */
+@media (prefers-reduced-motion:no-preference){
+  .hero-kites{animation:kite-rise 1.6s cubic-bezier(.2,.7,.1,1) both}
+  .launcher{animation:panel-rise 1s .35s cubic-bezier(.2,.7,.1,1) both}
+  @keyframes kite-rise{from{opacity:0;transform:translate(-60px,90px) rotate(-4deg)}to{opacity:1;transform:none}}
+  @keyframes panel-rise{from{opacity:0;transform:translateY(36px)}to{opacity:1;transform:none}}
+}
+
+/* =========================================================
+   KHỐI NỘI DUNG CHUNG
+   ========================================================= */
+.section{padding:clamp(72px,9vw,128px) 0}
+.section-head{max-width:720px;margin-bottom:clamp(40px,5vw,64px)}
+.section-head h2{font-size:clamp(32px,3.6vw,46px);letter-spacing:-.01em;text-wrap:balance}
+.section-head p{margin-top:18px;font-size:19px;max-width:38em}
+
+/* =========================================================
+   CÔNG CỤ
+   ========================================================= */
+/* Công cụ nổi bật: 2 cột, có hình minh họa giao diện */
+.tool{
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(36px,6vw,88px);align-items:center;
+}
+.tool-top{display:flex;align-items:center;gap:16px;margin-bottom:22px}
+.tool-top .icon1{--s:64px}
+.status{
+  display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:600;
+  padding:6px 12px 6px 10px;border-radius:999px;background:var(--grey-10);color:var(--grey);
+}
+.status.is-live{background:#E8F5EE;color:#1F6B3E}
+.status.is-internal{background:var(--orange-10);color:#8A5200}
+.status.is-building{background:var(--red-10);color:#A3161C}
+.status::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor;opacity:.85}
+.tool h3,.tool-panel h3{font-size:clamp(28px,2.8vw,36px);letter-spacing:-.01em}
+.tool-lead{margin-top:14px;font-size:19px;max-width:32em}
+.tool-points{margin-top:24px;display:grid;gap:12px;max-width:34em}
+.tool-points li{position:relative;padding-left:34px}
+ul.tool-points li::before{
+  content:"";position:absolute;left:0;top:.3em;width:20px;height:20px;border-radius:6px;
+  background:var(--red-10) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5 10.5l3.2 3.2L15 6.9' fill='none' stroke='%23DA2128' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/16px no-repeat;
+}
+ol.tool-points{counter-reset:step}
+ol.tool-points li{counter-increment:step}
+ol.tool-points li::before{
+  content:counter(step);position:absolute;left:0;top:.1em;width:24px;height:24px;border-radius:50%;
+  background:var(--red);color:var(--white);font:700 14px/24px var(--font-body);text-align:center;
+}
+.tool-meta{margin-top:26px;padding-top:20px;border-top:1px solid var(--grey-10);display:grid;gap:8px;font-size:16px;max-width:36em}
+.tool-meta b{color:var(--grey);font-weight:700}
+.tool-note{color:#77787A;font-style:italic}
+.tool-actions{margin-top:28px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+
+/* Công cụ dạng khối: xếp cạnh nhau, không có hình minh họa */
+.tool-pair{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));
+  gap:clamp(20px,3vw,32px);margin-top:clamp(72px,9vw,112px);
+}
+.tool-panel{
+  position:relative;display:flex;flex-direction:column;overflow:hidden;
+  background:var(--white);border:1px solid var(--grey-20);border-radius:28px;
+  padding:clamp(24px,3.4vw,40px) clamp(24px,3.4vw,40px) calc(clamp(24px,3.4vw,40px) + 8px);
+}
+.tool-panel::after{content:"";position:absolute;left:0;right:0;bottom:0;height:8px;background:var(--band-lr)}
+.tool-panel .tool-lead{font-size:18px}
+.tool-panel .tool-actions{margin-top:auto;padding-top:28px}
+
+/* ---- Khung minh họa giao diện dashboard ---- */
+.visual-stage{
+  position:relative;border-radius:28px;padding:clamp(22px,3.4vw,44px);
+  background:var(--grey-10);overflow:hidden;isolation:isolate;
+}
+.visual-stage::after{ /* dải màu chân khung ≤ 10% chiều cao (nguyên tắc KV) */
+  content:"";position:absolute;left:0;right:0;bottom:0;height:8px;background:var(--band-lr);z-index:1;
+}
+.visual-caption{margin-top:12px;font-size:14px;color:var(--grey);text-align:right}
+.mock-card{background:var(--white);border-radius:18px;box-shadow:var(--lift);padding:20px}
+.mr-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding-bottom:16px;border-bottom:1px solid var(--grey-10)}
+.mr-title{font-family:var(--font-head);font-weight:700;font-size:17px;color:var(--grey);margin-right:auto}
+.mr-chip{font-size:13px;font-weight:600;padding:5px 10px;border-radius:999px;background:var(--grey-10)}
+.mr-chip.is-on{background:var(--red);color:var(--white)}
+.mr-body{display:grid;grid-template-columns:.8fr 1.2fr;gap:22px;padding:18px 0}
+.mr-score{display:flex;flex-direction:column;justify-content:center;gap:10px;padding-right:18px;border-right:1px solid var(--grey-10)}
+.stars{display:flex;gap:3px}
+.stars svg{width:18px;height:18px;fill:var(--orange)}
+.stars svg.off{fill:var(--grey-20)}
+.stars.sm svg{width:13px;height:13px}
+.sk{height:9px;border-radius:5px;background:var(--grey-10)}
+.sk.dark{background:var(--grey-20)}
+.mr-dist{display:grid;gap:8px;align-content:center}
+.mr-row{display:grid;grid-template-columns:14px 1fr;gap:10px;align-items:center;font-size:12px;font-weight:700;color:var(--grey-60)}
+.mr-row i{display:block;height:9px;border-radius:5px;background:linear-gradient(90deg,var(--red) var(--w),var(--grey-10) var(--w))}
+.mr-review{display:grid;grid-template-columns:34px 1fr;gap:12px;padding-top:14px;border-top:1px solid var(--grey-10)}
+.mr-review + .mr-review{margin-top:14px}
+.mr-ava{width:34px;height:34px;border-radius:50%;background:var(--grey-20)}
+.mr-lines{display:grid;gap:7px}
+.mr-reply{
+  justify-self:start;margin-top:3px;font-size:12px;font-weight:700;color:var(--red);
+  background:var(--red-10);padding:4px 9px;border-radius:999px;
+}
+
+/* ---- Sắp có ---- */
+.roadmap{margin-top:clamp(80px,10vw,128px);padding-top:clamp(40px,5vw,56px);border-top:1px solid var(--grey-20)}
+.roadmap-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:12px 32px;margin-bottom:28px}
+.roadmap-head h3{font-size:clamp(24px,2.4vw,30px)}
+.roadmap-head p{font-size:17px;max-width:34em}
+.roadmap-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:clamp(16px,2.4vw,28px)}
+.road-item{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start;padding:22px;border-radius:22px;background:var(--grey-10)}
+.road-item .icon1{--s:52px}
+.road-item h4{margin-top:6px;font-size:19px;line-height:1.25}
+.road-item p{margin-top:8px;font-size:16px;line-height:1.55}
+.road-item .status{margin-top:14px;font-size:14px}
+
+/* =========================================================
+   VỀ ĐỘI
+   ========================================================= */
+.team{background:var(--grey-10)}
+.team-inner{display:grid;grid-template-columns:minmax(0,.75fr) minmax(0,1.6fr);gap:clamp(24px,6vw,96px);align-items:start}
+.team h2{font-size:clamp(32px,3.6vw,46px);letter-spacing:-.01em;text-wrap:balance}
+.team-statement{
+  font-family:var(--font-head);font-weight:700;color:var(--red);
+  font-size:clamp(24px,2.7vw,34px);line-height:1.3;letter-spacing:-.005em;max-width:24em;text-wrap:pretty;
+}
+.team-body{margin-top:24px;font-size:19px;max-width:36em}
+.team .btn{margin-top:32px}
+
+/* =========================================================
+   QUY TRÌNH
+   ========================================================= */
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(20px,3vw,40px)}
+.step{position:relative}
+.step:not(:last-child)::after{ /* đường nối sang bước kế tiếp */
+  content:"";position:absolute;top:27px;left:68px;right:calc(12px - clamp(20px,3vw,40px));height:2px;
+  background:repeating-linear-gradient(90deg,var(--grey-40) 0 8px,transparent 8px 14px);
+}
+.step-num{
+  width:56px;height:56px;border-radius:50%;display:grid;place-items:center;position:relative;
+  background:var(--white);border:2px solid var(--red);color:var(--red);
+  font:700 22px/1 var(--font-head);
+}
+.step:last-child .step-num{background:var(--red);color:var(--white)}
+.step h3{margin-top:22px;font-size:21px;line-height:1.25}
+.step p{margin-top:10px;font-size:17px;line-height:1.55}
+
+/* =========================================================
+   ĐỀ XUẤT
+   ========================================================= */
+.propose{background:var(--kv-band);color:var(--white)}
+.propose-inner{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(40px,6vw,88px);align-items:center}
+.propose h2{color:var(--white);font-size:clamp(32px,3.8vw,48px);letter-spacing:-.01em;max-width:14ch;text-wrap:balance}
+.propose-lead{margin-top:20px;font-size:19px;max-width:30em;color:rgba(255,255,255,.94)}
+.propose-list{margin-top:26px;display:grid;gap:10px;font-size:17px}
+.propose-list li{display:flex;gap:12px;align-items:baseline}
+.propose-list li::before{content:"";width:8px;height:8px;border-radius:2px;background:var(--yellow);flex:none;transform:translateY(-2px) rotate(45deg)}
+.form-card{background:var(--white);color:var(--grey);border-radius:26px;padding:clamp(24px,3.4vw,40px);box-shadow:var(--lift)}
+.form-card h3{font-size:24px}
+.field{display:grid;gap:8px;margin-top:20px}
+.field label{font-weight:600;font-size:16px}
+.field .hint{font-weight:400;color:var(--grey)}
+.field input,.field textarea{
+  width:100%;font:inherit;font-size:17px;color:var(--grey);background:var(--white);
+  border:1.5px solid var(--grey-20);border-radius:14px;padding:12px 14px;transition:border-color .2s,box-shadow .2s;
+}
+.field textarea{min-height:120px;resize:vertical;line-height:1.5}
+.field input:focus,.field textarea:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 4px var(--red-10)}
+.field.has-error textarea{border-color:var(--red)}
+.field-error{display:none;font-size:15px;color:var(--red);font-weight:600}
+.field.has-error .field-error{display:block}
+.form-foot{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:24px}
+.form-status{font-size:15px;font-weight:600;color:#1F6B3E}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+.site-footer{background:var(--white);padding-top:56px}
+.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px;padding-bottom:44px}
+.footer-grid .brand-logo{height:40px}
+.footer-about{margin-top:18px;font-size:16px;max-width:30em}
+.site-footer h4{margin:0 0 12px;font-size:17px}
+.footer-links{display:grid;gap:8px;font-size:16px}
+.footer-links a{text-decoration:none}
+.footer-links a:hover{color:var(--red);text-decoration:underline}
+.footer-bottom{border-top:1px solid var(--grey-10);padding-top:18px;padding-bottom:22px;font-size:14px;color:#77787A;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px}
+.footer-band{height:8px;background:var(--band-lr)}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media (max-width:1024px){
+  .nav a:not(.btn){display:none}
+  .hero-inner{grid-template-columns:1fr}
+  .launcher{justify-self:start}
+  .hero-kites{width:min(92vw,700px);height:min(92vw,700px);right:-24%;top:-2%;opacity:.85}
+  .tool{grid-template-columns:1fr}
+  .team-inner{grid-template-columns:1fr}
+  .steps{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:44px}
+  .step::after{display:none}
+  .propose-inner{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .footer-grid > :first-child{grid-column:1/-1}
+}
+@media (max-width:640px){
+  body{font-size:17px}
+  .header-inner{height:64px;gap:12px}
+  section[id]{scroll-margin-top:76px}
+  .brand{gap:12px}
+  .brand-logo{height:32px}
+  .brand-name{font-size:15px;padding-left:12px}
+  .nav .btn{min-height:40px;padding:0 14px;font-size:15px;margin-left:0}
+  .nav .btn .long{display:none}
+  .hero-lead{margin-top:20px}
+  .hero-actions .btn{flex:1 1 auto}
+  .launcher{max-width:none}
+  .launcher-hello{font-size:19px}
+  .section-head p,.tool-lead,.team-body{font-size:18px}
+  .mr-body{grid-template-columns:1fr}
+  .mr-score{border-right:0;padding-right:0;border-bottom:1px solid var(--grey-10);padding-bottom:16px}
+  .steps{grid-template-columns:1fr;row-gap:32px}
+  .step{display:grid;grid-template-columns:56px 1fr;grid-template-rows:auto 1fr;column-gap:18px}
+  .step-num{grid-row:1 / span 2}
+  .step h3{margin-top:14px}
+  .step p{grid-column:2;margin-top:6px}
+  .footer-grid{grid-template-columns:1fr}
+}
+@media (max-width:380px){
+  .brand-name{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{transition:none!important;animation:none!important}
+}
 </style>
 </head>
 <body>
-<header class="site-head">
-  <div class="wrap">
-    <a class="logo" href="/" aria-current="page"><img src="/assets/logo.png" alt="HDBank" width="113" height="30"></a>
-    <nav class="site-nav" aria-label="Công cụ">
-      <a href="/ggmap-dashboard/">Đánh giá <span class="long">Google Maps</span></a>
-      <a href="/ggmap-qrcode/">Tạo mã QR</a>
-      <a href="/bang-ten/">Bảng tên</a>
+
+<!-- ============ SVG SPRITE: đồ họa cánh diều, icon cấp 1 (glyph trắng), icon tab bar ============ -->
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <defs>
+    <!-- Gradient cánh diều: Vàng → Cam-Vàng → Đỏ-Cam → Đỏ, tỷ lệ đoạn 20% / 25% / 55%.
+         Đỏ-Cam HD chưa có mã trong playbook, tạm dùng #EC6A24 (nội suy giữa Cam và Đỏ). -->
+    <linearGradient id="kite-grad" x1="1" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFDD00"/>
+      <stop offset=".20" stop-color="#FFC20E"/>
+      <stop offset=".45" stop-color="#EC6A24"/>
+      <stop offset="1" stop-color="#DA2128"/>
+    </linearGradient>
+    <!-- Một cánh diều (đồ họa trừu tượng). Có file đồ họa cánh diều đôi gốc thì thay thế <symbol id="kites"> bên dưới. -->
+    <path id="wing" d="M60 560 C150 370 330 160 580 40 C530 230 400 430 60 560 Z"/>
+    <clipPath id="wing-clip"><use href="#wing"/></clipPath>
+  </defs>
+
+  <!-- Cánh diều đôi: 2 cánh chồng nhau, phần giao opacity 100%, phần còn lại 60% -->
+  <symbol id="kites" viewBox="0 0 600 600">
+    <use href="#wing" fill="url(#kite-grad)" opacity=".6"/>
+    <g transform="translate(120 20) rotate(14 300 300) scale(.92)"><use href="#wing" fill="url(#kite-grad)" opacity=".6"/></g>
+    <g clip-path="url(#wing-clip)"><g transform="translate(120 20) rotate(14 300 300) scale(.92)"><use href="#wing" fill="url(#kite-grad)"/></g></g>
+  </symbol>
+
+  <!-- ===== Glyph icon cấp 1 (trắng, 48×48) ===== -->
+  <symbol id="g-reviews" viewBox="0 0 48 48">
+    <path fill-rule="evenodd" d="M24 4C15.7 4 9 10.7 9 19c0 10.5 15 25 15 25s15-14.5 15-25C39 10.7 32.3 4 24 4zM24 11.5l1.88 4.91 5.25.27-4.09 3.31 1.37 5.08L24 22.2l-4.41 2.87 1.37-5.08-4.09-3.31 5.25-.27z"/>
+  </symbol>
+  <symbol id="g-qr" viewBox="0 0 48 48">
+    <path fill-rule="evenodd" d="M6 6h14v14H6zM9.5 9.5v7h7v-7zM11.5 11.5h3v3h-3zM28 6h14v14H28zM31.5 9.5v7h7v-7zM33.5 11.5h3v3h-3zM6 28h14v14H6zM9.5 31.5v7h7v-7zM11.5 33.5h3v3h-3z"/>
+    <path d="M28 28h5v5h-5zM37 28h5v5h-5zM32.5 32.5h5v5h-5zM28 37h5v5h-5zM37 37h5v5h-5z"/>
+  </symbol>
+  <symbol id="g-badge" viewBox="0 0 48 48">
+    <path fill-rule="evenodd" d="M7 11h34a4 4 0 0 1 4 4v18a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V15a4 4 0 0 1 4-4zM7 14.5v19h34v-19z"/>
+    <rect x="10" y="19" width="16" height="4.5" rx="1.5"/><rect x="10" y="26.5" width="11" height="3.5" rx="1.5"/>
+    <path fill-rule="evenodd" d="M29 18h9v12h-9zM31.2 20.2v7.6h4.6v-7.6z"/><rect x="32.4" y="22.4" width="2.2" height="3.2"/>
+  </symbol>
+  <symbol id="g-app" viewBox="0 0 48 48">
+    <path fill-rule="evenodd" d="M18 4h12a5 5 0 0 1 5 5v30a5 5 0 0 1-5 5H18a5 5 0 0 1-5-5V9a5 5 0 0 1 5-5zM17 9.5v26h14v-26zM24 17l1.53 3.9 4.18.25-3.24 2.65 1.06 4.05L24 25.6l-3.53 2.25 1.06-4.05-3.24-2.65 4.18-.25z"/>
+    <circle cx="24" cy="39.6" r="1.9"/>
+  </symbol>
+  <symbol id="g-report" viewBox="0 0 48 48">
+    <rect x="7" y="26" width="8" height="16" rx="2"/><rect x="20" y="17" width="8" height="25" rx="2"/><rect x="33" y="8" width="8" height="34" rx="2"/>
+  </symbol>
+  <symbol id="g-tool" viewBox="0 0 48 48">
+    <path d="M10 8h12v12H10zM26 8h12v12H26zM10 28h12v12H10zM32 27l7 7-7 7-7-7z"/>
+  </symbol>
+
+  <!-- ===== Icon tab bar (trắng, 24×24) ===== -->
+  <symbol id="t-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></symbol>
+  <symbol id="t-team" viewBox="0 0 24 24"><circle cx="9" cy="7.8" r="3.6"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0z"/><circle cx="17" cy="9" r="2.8"/><path d="M17 20h4.8a5 5 0 0 0-6.4-4.8A8 8 0 0 1 17 20z"/></symbol>
+  <symbol id="t-steps" viewBox="0 0 24 24"><rect x="3" y="14" width="5" height="7" rx="1.5"/><rect x="9.5" y="9" width="5" height="12" rx="1.5"/><rect x="16" y="4" width="5" height="17" rx="1.5"/></symbol>
+  <symbol id="t-plus" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2.5a9.5 9.5 0 1 1 0 19 9.5 9.5 0 0 1 0-19zM10.8 7v3.8H7v2.4h3.8V17h2.4v-3.8H17v-2.4h-3.8V7z"/></symbol>
+
+  <symbol id="star" viewBox="0 0 24 24"><path d="M12 2.5l2.6 6.1 6.6.6-5 4.4 1.5 6.5L12 16.6l-5.7 3.5 1.5-6.5-5-4.4 6.6-.6z"/></symbol>
+  <symbol id="arrow-out" viewBox="0 0 24 24"><path d="M14 3h7v7h-2.4V7.1l-8.2 8.2-1.7-1.7 8.2-8.2H14zM5 5h6v2.4H7.4v9.2h9.2V13H19v6H5z" fill="currentColor"/></symbol>
+</svg>
+
+<a class="skip-link" href="#cong-cu">Đi tới danh sách công cụ</a>
+
+<!-- ======================= HEADER ======================= -->
+<header class="site-header" id="top">
+  <div class="wrap header-inner">
+    <a class="brand" href="#top" aria-label="HDB Digital Hub, về đầu trang">
+      <!-- Logo gốc của HDBank (assets/logo.png của trang này). Không vẽ lại / chỉnh sửa logo. -->
+      <img class="brand-logo" src="/assets/logo.png" alt="HDBank">
+      <span class="brand-name">Digital Hub</span>
+    </a>
+    <nav class="nav" aria-label="Điều hướng chính">
+      <a href="#cong-cu">Công cụ</a>
+      <a href="#ve-doi">Về đội</a>
+      <a href="#quy-trinh">Quy trình</a>
+      <a class="btn btn-outline" href="#de-xuat">Đề xuất<span class="long">&nbsp;công cụ</span></a>
     </nav>
   </div>
 </header>
 
-<section class="band hero">
+<main>
+<!-- ======================= HERO ======================= -->
+<section class="hero" aria-labelledby="hero-title">
+  <svg class="hero-kites" aria-hidden="true"><use href="#kites"/></svg>
+  <div class="wrap hero-inner">
+    <div>
+      <h1 id="hero-title">Đưa dữ liệu số vào từng quyết định hằng ngày</h1>
+      <p class="hero-lead">HDB Digital Hub là nơi đội Digital Marketing HDBank đặt các công cụ tự phát triển: theo dõi đánh giá khách hàng trên Google Maps, tạo mã QR mời đánh giá, tạo bảng tên nhân viên. Không cần cài đặt, mở trình duyệt là dùng được.</p>
+      <div class="hero-actions">
+        <a class="btn btn-white" href="#cong-cu">Xem các công cụ</a>
+        <a class="btn btn-ghost" href="#de-xuat">Đề xuất công cụ mới</a>
+      </div>
+    </div>
+
+    <aside class="launcher" aria-label="Mở nhanh công cụ">
+      <div class="launcher-top">
+        <p class="launcher-hello">Hôm nay bạn cần công cụ nào?</p>
+        <p class="launcher-meta"><span class="live-dot" aria-hidden="true"></span><span id="live-count">Các công cụ đang hoạt động</span></p>
+      </div>
+      <div class="launcher-group">
+        <ul class="app-grid" id="launcher-live"></ul>
+      </div>
+      <div class="launcher-group">
+        <p class="launcher-label">Sắp có trên Digital Hub</p>
+        <ul class="app-grid" id="launcher-soon"></ul>
+      </div>
+      <nav class="tabbar" aria-label="Lối tắt">
+        <a class="tab" href="#cong-cu"><svg aria-hidden="true"><use href="#t-grid"/></svg>Công cụ</a>
+        <a class="tab" href="#ve-doi"><svg aria-hidden="true"><use href="#t-team"/></svg>Về đội</a>
+        <a class="tab tab-qr" id="tab-qr" href="https://hdb-digital.cloud/ggmap-qrcode/" aria-label="Tạo mã QR">
+          <span class="qr-float"><svg aria-hidden="true"><use href="#g-qr"/></svg></span>
+        </a>
+        <a class="tab" href="#quy-trinh"><svg aria-hidden="true"><use href="#t-steps"/></svg>Quy trình</a>
+        <a class="tab" href="#de-xuat"><svg aria-hidden="true"><use href="#t-plus"/></svg>Đề xuất</a>
+      </nav>
+    </aside>
+  </div>
+</section>
+
+<!-- ======================= CÔNG CỤ ======================= -->
+<section class="section" id="cong-cu" aria-labelledby="tools-title">
   <div class="wrap">
-    <div class="eyebrow">HDBank Digital</div>
-    <h1>Công cụ số cho <em>chi nhánh &amp; PGD</em></h1>
-    <p>Theo dõi đánh giá trên Google Maps và tạo ấn phẩm mã QR dẫn khách tới từng chi nhánh, phòng giao dịch.</p>
-    <div class="cta">
-      <a class="btn light" href="/ggmap-dashboard/">Xem đánh giá</a>
-      <a class="btn ghost" href="/ggmap-qrcode/">Tạo mã QR</a>
+    <header class="section-head">
+      <h2 id="tools-title">Công cụ đang hoạt động</h2>
+      <p>Mỗi công cụ giải một việc cụ thể của chi nhánh, phòng giao dịch và các đơn vị. Dữ liệu ghi rõ nguồn, giao diện theo nhận diện HDBank, mở là dùng.</p>
+    </header>
+
+    <div id="tool-list">
+      <noscript>
+        <p><a href="https://hdb-digital.cloud/ggmap-dashboard/">Dashboard đánh giá Google Maps</a></p>
+        <p><a href="https://hdb-digital.cloud/ggmap-qrcode/">Tạo mã QR Google Maps</a></p>
+        <p><a href="https://hdb-digital.cloud/bang-ten/">Tạo bảng tên</a></p>
+      </noscript>
+    </div>
+
+    <div class="roadmap">
+      <div class="roadmap-head">
+        <h3>Sắp có trên Digital Hub</h3>
+        <p>Đang được phát triển hoặc đội Digital đang dùng nội bộ. Công cụ sẽ mở cho các đơn vị khi sẵn sàng.</p>
+      </div>
+      <ul class="roadmap-list" id="roadmap-list"></ul>
     </div>
   </div>
 </section>
 
-<main>
-  <div class="wrap">
-    <h2 class="section-bar">Công cụ</h2>
-    <div class="cards">
-      <a class="card" href="/ggmap-dashboard/">
-        <div class="icon1" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.3l-5.8 3.1 1.1-6.5L2.6 9.3l6.5-.9z"/></svg>
-        </div>
-        <h3>Dashboard đánh giá Google Maps</h3>
-        <p>Điểm và nội dung đánh giá của từng CN/PGD HDBank trên Google Maps.</p>
-        <ul>
-          <li>Điểm trung bình, số lượt và phân bổ số sao</li>
-          <li>Lọc theo thời gian, tỉnh/thành phố, loại địa điểm</li>
-          <li>Đánh giá chi tiết kèm phản hồi của HDBank</li>
-        </ul>
-        <div class="go">Mở dashboard <span aria-hidden="true">→</span></div>
-      </a>
-      <a class="card" href="/ggmap-qrcode/">
-        <div class="icon1" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v.01M14 20h.01M17 20h4v-3"/></svg>
-        </div>
-        <h3>Tạo mã QR Google Maps</h3>
-        <p>Ấn phẩm mời khách đánh giá, có mã QR và tên đơn vị của từng CN/PGD.</p>
-        <ul>
-          <li>2 mẫu: table tent A5/A6 và màn hình dọc 9:16</li>
-          <li>Chọn sẵn vùng và chi nhánh/PGD trong danh sách</li>
-          <li>Tải file PNG hoặc PDF để in</li>
-        </ul>
-        <div class="go">Tạo mã QR <span aria-hidden="true">→</span></div>
-      </a>
-      <a class="card" href="/bang-ten/">
-        <div class="icon1" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="M6 10h7M6 14h5"/><rect x="15.5" y="11.5" width="3.5" height="3.5" rx=".5"/></svg>
-        </div>
-        <h3>Tạo bảng tên nhân viên</h3>
-        <p>Bảng tên in để bàn, có họ tên, vị trí công việc và mã QR của nhân viên.</p>
-        <ul>
-          <li>Font Myriad Pro Bold Condensed, tự co chữ cho vừa</li>
-          <li>Tải ảnh mã QR lên, tự cắt viền và đọc thử mã</li>
-          <li>Tải file JPEG 300 dpi để in</li>
-        </ul>
-        <div class="go">Tạo bảng tên <span aria-hidden="true">→</span></div>
-      </a>
+<!-- ======================= VỀ ĐỘI ======================= -->
+<section class="section team" id="ve-doi" aria-labelledby="team-title">
+  <div class="wrap team-inner">
+    <h2 id="team-title">Về đội Digital Marketing</h2>
+    <div>
+      <p class="team-statement">Chúng tôi giúp khách hàng tìm thấy, tin tưởng và chọn HDBank trên các kênh số.</p>
+      <p class="team-body">Hằng ngày, đội vận hành quảng cáo trực tuyến, website, đo lường dữ liệu và sự hiện diện của HDBank trên Google. Khi gặp việc lặp lại hoặc số liệu khó tổng hợp, chúng tôi tự xây công cụ để giải quyết, rồi chia sẻ cho chi nhánh, PGD và các đơn vị trên trang này.</p>
+      <a class="btn btn-outline" href="#de-xuat">Gửi đề xuất cho đội</a>
     </div>
   </div>
+</section>
+
+<!-- ======================= QUY TRÌNH ======================= -->
+<section class="section" id="quy-trinh" aria-labelledby="steps-title">
+  <div class="wrap">
+    <header class="section-head">
+      <h2 id="steps-title">Từ bài toán của bạn đến công cụ trên trang này</h2>
+      <p>Mỗi công cụ đi qua bốn bước, để khi mở rộng ra toàn hệ thống là đã dùng tốt ở đơn vị đầu tiên.</p>
+    </header>
+    <ol class="steps">
+      <li class="step">
+        <span class="step-num" aria-hidden="true">1</span>
+        <h3>Làm rõ bài toán</h3>
+        <p>Cùng đơn vị xác định ai dùng, dùng lúc nào và đo thành công bằng chỉ số nào.</p>
+      </li>
+      <li class="step">
+        <span class="step-num" aria-hidden="true">2</span>
+        <h3>Dựng bản dùng thử</h3>
+        <p>Thiết kế theo nhận diện HDBank, dựng nhanh bản chạy được trên trình duyệt để góp ý sớm.</p>
+      </li>
+      <li class="step">
+        <span class="step-num" aria-hidden="true">3</span>
+        <h3>Thử với người dùng thật</h3>
+        <p>Chạy thử tại một số chi nhánh, PGD và sửa theo phản hồi trước khi mở rộng.</p>
+      </li>
+      <li class="step">
+        <span class="step-num" aria-hidden="true">4</span>
+        <h3>Vận hành &amp; cải tiến</h3>
+        <p>Theo dõi mức sử dụng, cập nhật dữ liệu và bổ sung tính năng định kỳ.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ======================= ĐỀ XUẤT ======================= -->
+<section class="section propose" id="de-xuat" aria-labelledby="propose-title">
+  <div class="wrap propose-inner">
+    <div>
+      <h2 id="propose-title">Đơn vị bạn có việc cần một công cụ số?</h2>
+      <p class="propose-lead">Gửi mô tả ngắn, đội Digital Marketing sẽ liên hệ lại để trao đổi chi tiết. Những bài toán thường gặp:</p>
+      <ul class="propose-list">
+        <li>Việc lặp lại hằng tuần, đang làm thủ công trên Excel</li>
+        <li>Số liệu nằm rải rác ở nhiều nơi, khó tổng hợp</li>
+        <li>Ấn phẩm cần tạo riêng cho từng chi nhánh, PGD hoặc từng nhân viên</li>
+      </ul>
+    </div>
+
+    <form class="form-card" id="propose-form" novalidate>
+      <h3>Đề xuất công cụ</h3>
+      <div class="field">
+        <label for="f-name">Họ và tên</label>
+        <input id="f-name" name="name" type="text" autocomplete="name">
+      </div>
+      <div class="field">
+        <label for="f-unit">Đơn vị <span class="hint">(chi nhánh, PGD hoặc phòng ban)</span></label>
+        <input id="f-unit" name="unit" type="text">
+      </div>
+      <div class="field" id="field-need">
+        <label for="f-need">Bạn cần công cụ để làm gì?</label>
+        <textarea id="f-need" name="need" aria-describedby="need-error" placeholder="Ví dụ: mỗi tuần chi nhánh mất 2 giờ tổng hợp số liệu khách hàng mới từ 3 file khác nhau."></textarea>
+        <p class="field-error" id="need-error">Hãy mô tả ngắn việc bạn cần giải quyết.</p>
+      </div>
+      <div class="form-foot">
+        <button class="btn btn-red" type="submit">Gửi đề xuất</button>
+        <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+      </div>
+    </form>
+  </div>
+</section>
 </main>
 
-<footer class="site-foot">
-  <div class="wrap">
-    <span><b>HDBank Digital</b> · Trang nội bộ · Số liệu đánh giá lấy từ Google Maps công khai</span>
-    <span>Hotline <a href="tel:19006060">1900 6060</a> · <a href="https://www.hdbank.com.vn" target="_blank" rel="noopener">www.hdbank.com.vn</a></span>
+<!-- ======================= FOOTER ======================= -->
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <div>
+      <img class="brand-logo" src="/assets/logo.png" alt="HDBank">
+      <p class="footer-about">HDB Digital Hub là trang nội bộ của đội Digital Marketing, Ngân hàng TMCP Phát triển Thành phố Hồ Chí Minh (HDBank). Dữ liệu đánh giá lấy từ Google Maps công khai.</p>
+    </div>
+    <div>
+      <h4>Công cụ</h4>
+      <ul class="footer-links" id="footer-tools"></ul>
+    </div>
+    <div>
+      <h4>HDBank</h4>
+      <ul class="footer-links">
+        <li>Hotline <a href="tel:19006060">1900 6060</a></li>
+        <li><a href="https://www.hdbank.com.vn" target="_blank" rel="noopener">www.hdbank.com.vn</a></li>
+        <li><a href="#de-xuat">Đề xuất công cụ mới</a></li>
+      </ul>
+    </div>
   </div>
+  <div class="wrap">
+    <div class="footer-bottom">
+      <span>© <span id="year">2026</span> HDBank. Trang dùng nội bộ, không lập chỉ mục tìm kiếm.</span>
+      <span>Cam kết lợi ích cao nhất</span>
+    </div>
+  </div>
+  <div class="footer-band" aria-hidden="true"></div>
 </footer>
+
+<script>
+/* =========================================================
+   CẤU HÌNH — chỉnh tại đây khi thêm công cụ mới
+   ========================================================= */
+const SITE = 'https://hdb-digital.cloud';
+
+const CONFIG = {
+  // Email nhận đề xuất công cụ. Để trống: nút "Gửi đề xuất" sẽ sao chép nội dung để người dùng tự gửi.
+  proposalEmail: 'digitalwebsite@hdbank.com.vn'
+};
+
+/* status: 'live' (đang hoạt động) | 'internal' (đội dùng nội bộ) | 'building' (đang phát triển)
+   label: nhãn dưới icon app, tối đa 20 ký tự (quy chuẩn icon cấp 1)
+   preview: 'reviews' → hiển thị dạng hàng lớn có hình minh họa; bỏ trống → hiển thị dạng khối, xếp cạnh nhau
+   features: danh sách tính năng; steps: dùng thay features khi là các bước thực hiện theo thứ tự
+   spec: thông số file xuất (tùy chọn) */
+const TOOLS = [
+  {
+    status: 'live',
+    name: 'Dashboard đánh giá Google Maps',
+    label: 'Đánh giá Google Maps',
+    glyph: 'g-reviews',
+    url: SITE + '/ggmap-dashboard/',
+    cta: 'Mở dashboard',
+    lead: 'Theo dõi khách hàng nói gì về từng chi nhánh, phòng giao dịch HDBank trên Google Maps để cải thiện dịch vụ và phản hồi kịp thời.',
+    features: [
+      'Điểm trung bình, số lượt đánh giá và phân bổ số sao của từng điểm giao dịch',
+      'Lọc theo thời gian (7 ngày đến 12 tháng), tỉnh/thành và loại điểm',
+      'Đọc từng đánh giá kèm phản hồi của HDBank',
+      'Xuất Excel để đưa vào báo cáo'
+    ],
+    audience: 'Chi nhánh, PGD và các đơn vị theo dõi chất lượng dịch vụ',
+    note: 'Dữ liệu từ Google Maps công khai. Điểm có quản lý Google Business Profile hiển thị số liệu chính xác; các điểm còn lại có ngày đăng ước tính.',
+    preview: 'reviews'
+  },
+  {
+    status: 'live',
+    name: 'Tạo mã QR Google Maps',
+    label: 'Tạo mã QR',
+    glyph: 'g-qr',
+    url: SITE + '/ggmap-qrcode/',
+    cta: 'Tạo mã QR',
+    lead: 'Tạo ấn phẩm mời khách hàng đánh giá đúng chi nhánh, phòng giao dịch trên Google Maps, sẵn sàng để in trong vài phút.',
+    steps: [
+      'Chọn tỉnh/thành, rồi chọn chi nhánh hoặc PGD trong danh sách',
+      'Chọn mẫu: table tent A5/A6 hoặc màn hình dọc 9:16',
+      'Tải PNG để in, hoặc tải PDF'
+    ],
+    audience: 'Chi nhánh, PGD',
+    note: 'Mọi xử lý diễn ra trên trình duyệt của bạn. Hãy quét thử mã trước khi in.'
+  },
+  {
+    status: 'live',
+    name: 'Tạo bảng tên',
+    label: 'Tạo bảng tên',
+    glyph: 'g-badge',
+    url: SITE + '/bang-ten/',
+    cta: 'Tạo bảng tên',
+    lead: 'Nhập họ tên, vị trí và mã QR để có ngay file bảng tên của từng nhân viên, sẵn sàng để in.',
+    steps: [
+      'Nhập họ tên và vị trí',
+      'Tải ảnh mã QR lên: chọn file, kéo thả hoặc dán bằng Ctrl+V; có thể tự cắt viền trắng quanh mã',
+      'Xem trước, rồi tải file JPEG để in'
+    ],
+    audience: 'Cán bộ nhân viên tại chi nhánh, PGD và các đơn vị',
+    spec: 'JPEG 3516 × 1182 px, 300 DPI (khoảng 29,8 × 10 cm)',
+    note: 'Mọi xử lý diễn ra trên trình duyệt, ảnh của bạn không được gửi đi đâu.'
+  },
+  {
+    status: 'internal',
+    name: 'Báo cáo hiệu quả kênh số',
+    label: 'Báo cáo kênh số',
+    glyph: 'g-report',
+    lead: 'Tự động gom số liệu Google Ads, Meta, TikTok, AppsFlyer và GA4 mỗi ngày về một nơi; báo cáo tuần được soạn sẵn.'
+  },
+  {
+    status: 'building',
+    name: 'Chiến Thần Review App',
+    label: 'Review App',
+    glyph: 'g-app',
+    lead: 'Thi đua nội bộ: tạo mã QR mời khách hàng đánh giá ứng dụng HDBank, kèm dashboard theo dõi kết quả từng đơn vị.'
+  }
+];
+
+const STATUS_TEXT = { live: 'Đang hoạt động', internal: 'Đội Digital đang dùng nội bộ', building: 'Đang phát triển' };
+
+/* =========================================================
+   RENDER
+   ========================================================= */
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const icon1 = glyph => `<span class="icon1"><svg aria-hidden="true"><use href="#${glyph || 'g-tool'}"/></svg></span>`;
+const stars = (n, cls = '') => `<span class="stars ${cls}">${[1,2,3,4,5].map(i => `<svg class="${i > n ? 'off' : ''}"><use href="#star"/></svg>`).join('')}</span>`;
+
+const PREVIEWS = {
+  reviews: () => `
+    <div class="visual-stage" aria-hidden="true">
+      <div class="mock-card">
+        <div class="mr-head">
+          <span class="mr-title">Đánh giá Google Maps</span>
+          <span class="mr-chip is-on">30 ngày</span><span class="mr-chip">Tất cả tỉnh/thành</span>
+        </div>
+        <div class="mr-body">
+          <div class="mr-score">${stars(5)}<div class="sk dark" style="width:70%"></div><div class="sk" style="width:46%"></div></div>
+          <div class="mr-dist">
+            ${[['5','78%'],['4','46%'],['3','20%'],['2','9%'],['1','14%']].map(([k,w]) => `<div class="mr-row"><span>${k}</span><i style="--w:${w}"></i></div>`).join('')}
+          </div>
+        </div>
+        <div class="mr-review"><span class="mr-ava"></span><div class="mr-lines">${stars(5,'sm')}<div class="sk dark" style="width:92%"></div><div class="sk" style="width:68%"></div><span class="mr-reply">HDBank đã phản hồi</span></div></div>
+        <div class="mr-review"><span class="mr-ava"></span><div class="mr-lines">${stars(4,'sm')}<div class="sk dark" style="width:80%"></div><div class="sk" style="width:52%"></div></div></div>
+      </div>
+    </div>
+    <p class="visual-caption">Hình minh họa giao diện</p>`
+};
+
+function toolBody(t) {
+  const list = t.steps
+    ? `<ol class="tool-points">${t.steps.map(s => `<li>${esc(s)}</li>`).join('')}</ol>`
+    : `<ul class="tool-points">${(t.features || []).map(s => `<li>${esc(s)}</li>`).join('')}</ul>`;
+  return `
+    <div class="tool-top">${icon1(t.glyph)}<span class="status is-live">${STATUS_TEXT.live}</span></div>
+    <h3>${esc(t.name)}</h3>
+    <p class="tool-lead">${esc(t.lead)}</p>
+    ${list}
+    <div class="tool-meta">
+      ${t.audience ? `<p><b>Dành cho:</b> ${esc(t.audience)}</p>` : ''}
+      ${t.spec ? `<p><b>File xuất:</b> ${esc(t.spec)}</p>` : ''}
+      ${t.note ? `<p class="tool-note">${esc(t.note)}</p>` : ''}
+    </div>
+    <div class="tool-actions">
+      <a class="btn btn-red" href="${esc(t.url)}">${esc(t.cta || 'Mở công cụ')}<svg aria-hidden="true"><use href="#arrow-out"/></svg></a>
+    </div>`;
+}
+
+function renderTools() {
+  const live = TOOLS.filter(t => t.status === 'live');
+  const soon = TOOLS.filter(t => t.status !== 'live');
+  const featured = live.filter(t => PREVIEWS[t.preview]);
+  const compact = live.filter(t => !PREVIEWS[t.preview]);
+
+  document.getElementById('live-count').textContent = `${live.length} công cụ đang hoạt động`;
+
+  document.getElementById('launcher-live').innerHTML = live.map(t =>
+    `<li><a class="app" href="${esc(t.url)}">${icon1(t.glyph)}<span class="app-name">${esc(t.label)}</span></a></li>`).join('');
+
+  document.getElementById('launcher-soon').innerHTML = soon.map(t =>
+    `<li><span class="app is-soon" title="${esc(t.name)}: ${esc(STATUS_TEXT[t.status])}">${icon1(t.glyph)}<span class="app-name">${esc(t.label)}</span></span></li>`).join('');
+
+  document.getElementById('tool-list').innerHTML =
+    featured.map(t => `
+      <article class="tool">
+        <div class="tool-copy">${toolBody(t)}</div>
+        <div class="tool-visual">${PREVIEWS[t.preview](t)}</div>
+      </article>`).join('') +
+    (compact.length ? `<div class="tool-pair">${compact.map(t => `<article class="tool-panel">${toolBody(t)}</article>`).join('')}</div>` : '');
+
+  document.getElementById('roadmap-list').innerHTML = soon.map(t => `
+    <li class="road-item">
+      ${icon1(t.glyph)}
+      <div>
+        <h4>${esc(t.name)}</h4>
+        <p>${esc(t.lead)}</p>
+        <span class="status is-${t.status}">${STATUS_TEXT[t.status]}</span>
+      </div>
+    </li>`).join('');
+
+  document.getElementById('footer-tools').innerHTML = live.map(t =>
+    `<li><a href="${esc(t.url)}">${esc(t.name)}</a></li>`).join('');
+
+  const qr = live.find(t => t.glyph === 'g-qr');
+  if (qr) document.getElementById('tab-qr').href = qr.url;
+}
+
+/* =========================================================
+   FORM ĐỀ XUẤT
+   ========================================================= */
+function initForm() {
+  const form = document.getElementById('propose-form');
+  const field = document.getElementById('field-need');
+  const status = document.getElementById('form-status');
+  form.need.addEventListener('input', () => field.classList.remove('has-error'));
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const name = form.name.value.trim(), unit = form.unit.value.trim(), need = form.need.value.trim();
+    if (!need) { field.classList.add('has-error'); form.need.focus(); status.textContent = ''; return; }
+
+    const subject = `[Digital Hub] Đề xuất công cụ${unit ? ' – ' + unit : ''}`;
+    const body = `Họ và tên: ${name || '(chưa điền)'}\nĐơn vị: ${unit || '(chưa điền)'}\n\nNhu cầu:\n${need}`;
+
+    if (CONFIG.proposalEmail) {
+      window.location.href = `mailto:${CONFIG.proposalEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      status.textContent = 'Đã mở email soạn sẵn. Kiểm tra lại rồi bấm gửi.';
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(`${subject}\n\n${body}`);
+      status.textContent = 'Đã sao chép đề xuất. Dán vào email hoặc tin nhắn gửi đội Digital Marketing.';
+    } catch {
+      status.textContent = 'Không sao chép được tự động. Hãy chọn và sao chép nội dung trong ô mô tả.';
+    }
+  });
+}
+
+/* Bóng header khi cuộn */
+function initHeader() {
+  const h = document.querySelector('.site-header');
+  const onScroll = () => h.classList.toggle('is-scrolled', window.scrollY > 8);
+  onScroll(); window.addEventListener('scroll', onScroll, { passive: true });
+}
+
+document.getElementById('year').textContent = new Date().getFullYear();
+renderTools();
+initForm();
+initHeader();
+</script>
 </body>
 </html>
