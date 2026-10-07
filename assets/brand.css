@@ -1,5 +1,5 @@
 /* Nhận diện HDBank theo "Guideline thiết kế HDBank" (rút từ HDBank Playbook v1).
-   File dùng chung cho 3 trang hdb-digital.cloud; mỗi repo giữ một bản sao trong assets/. Sửa ở home_site rồi chép sang site/ và qr_site/.
+   File dùng chung cho các trang hdb-digital.cloud; mỗi repo giữ một bản sao trong assets/. Sửa ở home_site rồi chép sang site/, qr_site/ và badge_site/.
    - Chỉ dùng 5 màu thương hiệu và sắc độ 10–100% của chúng (sắc độ = pha với trắng).
    - Dải màu chủ đạo chạy từ dưới lên: cam vàng ở đáy → cam → đỏ chiếm ~2/3 phía trên.
    - Logo dương bản, góc trên trái, trên nền trắng; vùng an toàn ≈ chiều cao chữ "H"; rộng tối thiểu 55 px.
