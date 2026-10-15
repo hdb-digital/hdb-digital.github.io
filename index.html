@@ -700,13 +700,14 @@ const TOOLS = [
     cta: 'Mở dashboard',
     lead: 'Theo dõi khách hàng nói gì về từng chi nhánh, phòng giao dịch HDBank trên Google Maps để cải thiện dịch vụ và phản hồi kịp thời.',
     features: [
-      'Điểm trung bình, số lượt đánh giá và phân bổ số sao của từng điểm giao dịch',
-      'Lọc theo thời gian (7 ngày đến 12 tháng), tỉnh/thành và loại điểm',
-      'Đọc từng đánh giá kèm phản hồi của HDBank',
-      'Xuất Excel để đưa vào báo cáo'
+      'Điểm trung bình, số lượt đánh giá và phân bổ số sao theo khoảng ngày bất kỳ; lọc theo tỉnh/thành và từng địa điểm',
+      'So sánh với kỳ liền trước, cùng kỳ năm trước hoặc khoảng ngày tự chọn; đối chiếu với số liệu trước chương trình thi đua (10/10/2026)',
+      'Biểu đồ trực quan, sinh động, dễ dàng theo dõi và báo cáo',
+      'Đọc từng đánh giá kèm phản hồi của HDBank; lọc theo số sao hoặc chỉ xem đánh giá chưa được phản hồi',
+      'Xuất Excel theo bộ lọc đang chọn để đưa vào báo cáo'
     ],
     audience: 'Chi nhánh, PGD và các đơn vị theo dõi chất lượng dịch vụ',
-    note: 'Dữ liệu từ Google Maps công khai. Điểm có quản lý Google Business Profile hiển thị số liệu chính xác; các điểm còn lại có ngày đăng ước tính.',
+    note: 'Dữ liệu từ Google Maps công khai, tự động cập nhật lúc 10:00 hằng ngày.',
     preview: 'reviews'
   },
   {
@@ -773,7 +774,7 @@ const PREVIEWS = {
       <div class="mock-card">
         <div class="mr-head">
           <span class="mr-title">Đánh giá Google Maps</span>
-          <span class="mr-chip is-on">30 ngày</span><span class="mr-chip">Tất cả tỉnh/thành</span>
+          <span class="mr-chip is-on">So với kỳ trước</span><span class="mr-chip">Tất cả tỉnh/thành</span>
         </div>
         <div class="mr-body">
           <div class="mr-score">${stars(5)}<div class="sk dark" style="width:70%"></div><div class="sk" style="width:46%"></div></div>
