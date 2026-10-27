@@ -466,6 +466,10 @@ ol.tool-points li::before{
   <symbol id="g-report" viewBox="0 0 48 48">
     <rect x="7" y="26" width="8" height="16" rx="2"/><rect x="20" y="17" width="8" height="25" rx="2"/><rect x="33" y="8" width="8" height="34" rx="2"/>
   </symbol>
+  <symbol id="g-rank" viewBox="0 0 48 48">
+    <path d="M6 30H17V22H31V34H42V44H6Z"/>
+    <path transform="translate(13.2 -1) scale(.9)" d="M12 2.5l2.6 6.1 6.6.6-5 4.4 1.5 6.5L12 16.6l-5.7 3.5 1.5-6.5-5-4.4 6.6-.6z"/>
+  </symbol>
   <symbol id="g-tool" viewBox="0 0 48 48">
     <path d="M10 8h12v12H10zM26 8h12v12H26zM10 28h12v12H10zM32 27l7 7-7 7-7-7z"/>
   </symbol>
@@ -549,6 +553,7 @@ ol.tool-points li::before{
     <div id="tool-list">
       <noscript>
         <p><a href="https://hdb-digital.cloud/ggmap-dashboard/">Dashboard đánh giá Google Maps</a></p>
+        <p><a href="https://hdb-digital.cloud/app-ranking/">Xếp hạng app ngân hàng</a></p>
         <p><a href="https://hdb-digital.cloud/ggmap-qrcode/">Tạo mã QR Google Maps</a></p>
         <p><a href="https://hdb-digital.cloud/bang-ten/">Tạo bảng tên</a></p>
       </noscript>
@@ -709,6 +714,23 @@ const TOOLS = [
     audience: 'Chi nhánh, PGD và các đơn vị theo dõi chất lượng dịch vụ',
     note: 'Dữ liệu từ Google Maps công khai, tự động cập nhật lúc 10:00 hằng ngày.',
     preview: 'reviews'
+  },
+  {
+    status: 'live',
+    name: 'Xếp hạng app ngân hàng',
+    label: 'Xếp hạng app',
+    glyph: 'g-rank',
+    url: SITE + '/app-ranking/',
+    cta: 'Mở dashboard',
+    lead: 'Theo dõi thứ hạng lượt tải và rating của app HDBank so với các app ngân hàng trên App Store và Google Play.',
+    features: [
+      'Hạng HDBank trong nhóm Banking theo ngày, tuần, tháng; xem riêng App Store, Google Play hoặc gộp 2 store',
+      'Bảng xếp hạng top 25 kèm lượt tải, thị phần và rating; so sánh HDBank với app bất kỳ',
+      'Rating và review mới của HDBank, lọc theo số sao',
+      'Tải CSV để đưa vào báo cáo'
+    ],
+    audience: 'Đội Digital, đội sản phẩm app và các đơn vị theo dõi ngân hàng số',
+    note: 'Dữ liệu từ Sensor Tower, lượt tải là số ước tính. Cần mật khẩu để xem.'
   },
   {
     status: 'live',
