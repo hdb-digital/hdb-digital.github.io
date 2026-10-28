@@ -150,7 +150,9 @@ section[id]{scroll-margin-top:88px}
 .launcher-group{padding:14px 18px 6px}
 .launcher-group + .launcher-group{border-top:1px solid var(--grey-10);margin-top:8px;padding-top:16px}
 .launcher-label{font-size:14px;font-weight:600;color:var(--grey);padding:0 6px 10px}
-.app-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+/* 3 icon mỗi hàng; hàng cuối thiếu icon thì căn giữa để khung luôn cân */
+.app-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:6px}
+.app-grid > li{flex:0 0 calc((100% - 12px) / 3);min-width:0}
 .app{
   display:flex;flex-direction:column;align-items:center;gap:8px;padding:10px 4px 12px;border-radius:18px;
   text-decoration:none;color:var(--grey);text-align:center;transition:background-color .2s;position:relative;
@@ -158,8 +160,11 @@ section[id]{scroll-margin-top:88px}
 a.app:hover{background:var(--red-10)}
 a.app:hover .icon1{transform:translateY(-3px);box-shadow:0 14px 22px -10px rgba(218,33,40,.65)}
 .app-name{font-size:12px;line-height:1.3;font-weight:600;max-width:10.5em} /* nhãn size 12, ≤ 20 ký tự */
-.app.is-soon .icon1{opacity:.5}
-.app.is-soon .app-name{color:var(--grey)}
+/* Sắp có: dạng thẻ nhỏ 2 cột, nhẹ hơn nhóm đang hoạt động */
+.soon-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.soon-app{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:14px;background:var(--grey-10);min-width:0}
+.soon-app .icon1{--s:34px;opacity:.55;box-shadow:none}
+.soon-app .app-name{max-width:none;font-size:13px;line-height:1.25}
 
 /* Icon cấp 1: biểu tượng trắng trong khối vuông bo góc kiểu icon app iPhone, nền dải màu thương hiệu */
 .icon1{
@@ -222,7 +227,7 @@ a.app:hover .icon1{transform:translateY(-3px);box-shadow:0 14px 22px -10px rgba(
 .status.is-internal{background:var(--orange-10);color:#8A5200}
 .status.is-building{background:var(--red-10);color:#A3161C}
 .status::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor;opacity:.85}
-.tool h3,.tool-panel h3{font-size:clamp(28px,2.8vw,36px);letter-spacing:-.01em}
+.tool h4,.tool-panel h4{font-size:clamp(28px,2.8vw,36px);line-height:1.15;letter-spacing:-.01em}
 .tool-lead{margin-top:14px;font-size:19px;max-width:32em}
 .tool-points{margin-top:24px;display:grid;gap:12px;max-width:34em}
 .tool-points li{position:relative;padding-left:34px}
@@ -241,11 +246,17 @@ ol.tool-points li::before{
 .tool-note{color:#77787A;font-style:italic}
 .tool-actions{margin-top:28px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 
-/* Công cụ dạng khối: xếp cạnh nhau, không có hình minh họa */
-.tool-pair{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));
-  gap:clamp(20px,3vw,32px);margin-top:clamp(72px,9vw,112px);
-}
+/* Nhóm công cụ: Dashboard theo dõi / Tạo ấn phẩm */
+.tool-group + .tool-group{margin-top:clamp(80px,10vw,128px)}
+/* Tiêu đề nhóm dạng thanh phân cách: tên nhóm + số công cụ + đường kẻ, nhẹ hơn tên công cụ */
+.group-head{display:flex;align-items:center;gap:14px;margin-bottom:clamp(28px,3.4vw,40px)}
+.group-head h3{font-size:clamp(21px,2vw,25px);white-space:nowrap}
+.group-head::after{content:"";flex:1 1 0;min-width:24px;height:1px;background:var(--grey-20)}
+.group-count{font-size:15px;font-weight:600;line-height:1;padding:7px 12px;border-radius:999px;background:var(--red-10);color:#A3161C;white-space:nowrap}
+
+/* Công cụ dạng khối: 2 cột bằng nhau, không có hình minh họa */
+.tool-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(20px,3vw,32px)}
+.tool + .tool-pair{margin-top:clamp(56px,7vw,88px)}
 .tool-panel{
   position:relative;display:flex;flex-direction:column;overflow:hidden;
   background:var(--white);border:1px solid var(--grey-20);border-radius:28px;
@@ -254,6 +265,15 @@ ol.tool-points li::before{
 .tool-panel::after{content:"";position:absolute;left:0;right:0;bottom:0;height:8px;background:var(--band-lr)}
 .tool-panel .tool-lead{font-size:18px}
 .tool-panel .tool-actions{margin-top:auto;padding-top:28px}
+/* Số thẻ lẻ: thẻ cuối trải hết hàng, nội dung chia 2 cột để không bị thẻ mồ côi */
+.tool-pair > .tool-panel:last-child:nth-child(odd){
+  grid-column:1 / -1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  grid-template-areas:"main detail" "actions detail";grid-template-rows:auto 1fr;column-gap:clamp(36px,6vw,88px);
+}
+.tool-pair > .tool-panel:last-child:nth-child(odd) .tp-main{grid-area:main}
+.tool-pair > .tool-panel:last-child:nth-child(odd) .tp-detail{grid-area:detail}
+.tool-pair > .tool-panel:last-child:nth-child(odd) .tp-detail > :first-child{margin-top:0}
+.tool-pair > .tool-panel:last-child:nth-child(odd) .tool-actions{grid-area:actions;align-self:end}
 
 /* ---- Khung minh họa giao diện dashboard ---- */
 .visual-stage{
@@ -389,6 +409,10 @@ ol.tool-points li::before{
   .footer-grid{grid-template-columns:1fr 1fr}
   .footer-grid > :first-child{grid-column:1/-1}
 }
+@media (max-width:860px){
+  .tool-pair{grid-template-columns:1fr}
+  .tool-pair > .tool-panel:last-child:nth-child(odd){display:flex;grid-column:auto}
+}
 @media (max-width:640px){
   body{font-size:17px}
   .header-inner{height:64px;gap:12px}
@@ -411,6 +435,9 @@ ol.tool-points li::before{
   .step h3{margin-top:14px}
   .step p{grid-column:2;margin-top:6px}
   .footer-grid{grid-template-columns:1fr}
+  /* Tiêu đề nhóm: cho xuống dòng, bỏ đường kẻ để không tràn ngang trên màn hẹp */
+  .group-head h3{white-space:normal}
+  .group-head::after{display:none}
 }
 @media (max-width:380px){
   .brand-name{display:none}
@@ -531,7 +558,7 @@ ol.tool-points li::before{
       </div>
       <div class="launcher-group">
         <p class="launcher-label">Sắp có trên Digital Hub</p>
-        <ul class="app-grid" id="launcher-soon"></ul>
+        <ul class="soon-grid" id="launcher-soon"></ul>
       </div>
       <nav class="tabbar" aria-label="Lối tắt">
         <a class="tab" href="#cong-cu"><svg aria-hidden="true"><use href="#t-grid"/></svg>Công cụ</a>
@@ -660,7 +687,7 @@ ol.tool-points li::before{
   <div class="wrap footer-grid">
     <div>
       <img class="brand-logo" src="/assets/logo.png" alt="HDBank">
-      <p class="footer-about">HDB Digital Hub là trang nội bộ của đội Digital Marketing, Ngân hàng TMCP Phát triển Thành phố Hồ Chí Minh (HDBank). Dữ liệu đánh giá lấy từ Google Maps công khai.</p>
+      <p class="footer-about">HDB Digital Hub là trang nội bộ của đội Digital Marketing, Ngân hàng TMCP Phát triển Thành phố Hồ Chí Minh (HDBank). Nguồn dữ liệu được ghi rõ ở từng công cụ.</p>
     </div>
     <div>
       <h4>Công cụ</h4>
@@ -695,7 +722,14 @@ const CONFIG = {
   proposalEmail: 'digitalwebsite@hdbank.com.vn'
 };
 
+/* Nhóm hiển thị của công cụ đang hoạt động, theo thứ tự trên trang và trong khung mở nhanh */
+const GROUPS = [
+  { id: 'monitor', title: 'Dashboard theo dõi' },
+  { id: 'print',   title: 'Tạo ấn phẩm' }
+];
+
 /* status: 'live' (đang hoạt động) | 'internal' (đội dùng nội bộ) | 'building' (đang phát triển)
+   group: id nhóm trong GROUPS (công cụ đang hoạt động); bỏ trống → vào nhóm "Công cụ khác"
    label: nhãn dưới icon app, tối đa 20 ký tự (quy chuẩn icon cấp 1)
    preview: 'reviews' → hiển thị dạng hàng lớn có hình minh họa; bỏ trống → hiển thị dạng khối, xếp cạnh nhau
    features: danh sách tính năng; steps: dùng thay features khi là các bước thực hiện theo thứ tự
@@ -703,6 +737,7 @@ const CONFIG = {
 const TOOLS = [
   {
     status: 'live',
+    group: 'monitor',
     name: 'Dashboard đánh giá Google Maps',
     label: 'Đánh giá Google Maps',
     glyph: 'g-reviews',
@@ -722,6 +757,7 @@ const TOOLS = [
   },
   {
     status: 'live',
+    group: 'monitor',
     name: 'Xếp hạng app ngân hàng',
     label: 'Xếp hạng app',
     glyph: 'g-rank',
@@ -739,6 +775,7 @@ const TOOLS = [
   },
   {
     status: 'live',
+    group: 'monitor',
     name: 'Theo dõi follower',
     label: 'Theo dõi follower',
     glyph: 'g-follow',
@@ -756,6 +793,7 @@ const TOOLS = [
   },
   {
     status: 'live',
+    group: 'print',
     name: 'Tạo mã QR Google Maps',
     label: 'Tạo mã QR',
     glyph: 'g-qr',
@@ -772,6 +810,7 @@ const TOOLS = [
   },
   {
     status: 'live',
+    group: 'print',
     name: 'Tạo bảng tên',
     label: 'Tạo bảng tên',
     glyph: 'g-badge',
@@ -838,14 +877,18 @@ function toolBody(t) {
     ? `<ol class="tool-points">${t.steps.map(s => `<li>${esc(s)}</li>`).join('')}</ol>`
     : `<ul class="tool-points">${(t.features || []).map(s => `<li>${esc(s)}</li>`).join('')}</ul>`;
   return `
-    <div class="tool-top">${icon1(t.glyph)}<span class="status is-live">${STATUS_TEXT.live}</span></div>
-    <h3>${esc(t.name)}</h3>
-    <p class="tool-lead">${esc(t.lead)}</p>
-    ${list}
-    <div class="tool-meta">
-      ${t.audience ? `<p><b>Dành cho:</b> ${esc(t.audience)}</p>` : ''}
-      ${t.spec ? `<p><b>File xuất:</b> ${esc(t.spec)}</p>` : ''}
-      ${t.note ? `<p class="tool-note">${esc(t.note)}</p>` : ''}
+    <div class="tp-main">
+      <div class="tool-top">${icon1(t.glyph)}<span class="status is-live">${STATUS_TEXT.live}</span></div>
+      <h4>${esc(t.name)}</h4>
+      <p class="tool-lead">${esc(t.lead)}</p>
+    </div>
+    <div class="tp-detail">
+      ${list}
+      <div class="tool-meta">
+        ${t.audience ? `<p><b>Dành cho:</b> ${esc(t.audience)}</p>` : ''}
+        ${t.spec ? `<p><b>File xuất:</b> ${esc(t.spec)}</p>` : ''}
+        ${t.note ? `<p class="tool-note">${esc(t.note)}</p>` : ''}
+      </div>
     </div>
     <div class="tool-actions">
       <a class="btn btn-red" href="${esc(t.url)}">${esc(t.cta || 'Mở công cụ')}<svg aria-hidden="true"><use href="#arrow-out"/></svg></a>
@@ -853,10 +896,13 @@ function toolBody(t) {
 }
 
 function renderTools() {
-  const live = TOOLS.filter(t => t.status === 'live');
   const soon = TOOLS.filter(t => t.status !== 'live');
-  const featured = live.filter(t => PREVIEWS[t.preview]);
-  const compact = live.filter(t => !PREVIEWS[t.preview]);
+  const liveAll = TOOLS.filter(t => t.status === 'live');
+  const known = new Set(GROUPS.map(g => g.id));
+  const groups = [...GROUPS, { id: '', title: 'Công cụ khác' }]
+    .map(g => ({ ...g, tools: liveAll.filter(t => g.id ? t.group === g.id : !known.has(t.group)) }))
+    .filter(g => g.tools.length);
+  const live = groups.flatMap(g => g.tools); // thứ tự theo nhóm, dùng chung cho khung mở nhanh và footer
 
   document.getElementById('live-count').textContent = `${live.length} công cụ đang hoạt động`;
 
@@ -864,15 +910,22 @@ function renderTools() {
     `<li><a class="app" href="${esc(t.url)}">${icon1(t.glyph)}<span class="app-name">${esc(t.label)}</span></a></li>`).join('');
 
   document.getElementById('launcher-soon').innerHTML = soon.map(t =>
-    `<li><span class="app is-soon" title="${esc(t.name)}: ${esc(STATUS_TEXT[t.status])}">${icon1(t.glyph)}<span class="app-name">${esc(t.label)}</span></span></li>`).join('');
+    `<li class="soon-app" title="${esc(t.name)}: ${esc(STATUS_TEXT[t.status])}">${icon1(t.glyph)}<span class="app-name">${esc(t.label)}</span></li>`).join('');
 
-  document.getElementById('tool-list').innerHTML =
-    featured.map(t => `
-      <article class="tool">
-        <div class="tool-copy">${toolBody(t)}</div>
-        <div class="tool-visual">${PREVIEWS[t.preview](t)}</div>
-      </article>`).join('') +
-    (compact.length ? `<div class="tool-pair">${compact.map(t => `<article class="tool-panel">${toolBody(t)}</article>`).join('')}</div>` : '');
+  document.getElementById('tool-list').innerHTML = groups.map((g, i) => {
+    const featured = g.tools.filter(t => PREVIEWS[t.preview]);
+    const compact = g.tools.filter(t => !PREVIEWS[t.preview]);
+    return `
+    <div class="tool-group" role="group" aria-labelledby="grp-${i}">
+      <div class="group-head"><h3 id="grp-${i}">${esc(g.title)}</h3><span class="group-count">${g.tools.length} công cụ</span></div>
+      ${featured.map(t => `
+        <article class="tool">
+          <div class="tool-copy">${toolBody(t)}</div>
+          <div class="tool-visual">${PREVIEWS[t.preview](t)}</div>
+        </article>`).join('')}
+      ${compact.length ? `<div class="tool-pair">${compact.map(t => `<article class="tool-panel">${toolBody(t)}</article>`).join('')}</div>` : ''}
+    </div>`;
+  }).join('');
 
   document.getElementById('roadmap-list').innerHTML = soon.map(t => `
     <li class="road-item">
