@@ -1,6 +1,6 @@
 # HDB UI · Hướng dẫn dựng trang cho hdb-digital.cloud
 
-Phiên bản 1.0 · 28/10/2026 · đi kèm `hdb-ui.css` v1.0
+Phiên bản 1.1 · 29/10/2026 · đi kèm `hdb-ui.css` v1.1
 Dành cho AI (Claude Code…) và người dựng trang mới trên HDB Digital Hub. **Đọc hết file này trước khi viết code.**
 
 Mục tiêu: mọi trang mới trông như cùng một sản phẩm với các trang đang chạy (Digital Hub, Đánh giá Google Maps, Xếp hạng app, Theo dõi follower, Tạo mã QR, Tạo bảng tên), đúng HDBank Digital Playbook (mục 2.a–2.j).
@@ -17,7 +17,7 @@ Trong `<head>`, theo đúng thứ tự:
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap">
-<link rel="stylesheet" href="https://hdb-digital.cloud/assets/hdb-ui.css?v=1.0">
+<link rel="stylesheet" href="https://hdb-digital.cloud/assets/hdb-ui.css?v=1.1">
 <style>
   /* Chỉ CSS riêng của trang này (thành phần chưa có trong hdb-ui.css) */
 </style>
@@ -555,6 +555,12 @@ File nằm ở `assets/hdb-ui.css` trong repo `hdb-digital.github.io`; mọi tra
 
 ### Nhật ký
 - **1.0** (28/10/2026): bản đầu, rút từ 6 trang đang chạy.
+- **1.1** (29/10/2026), sửa lỗi, không đổi tên class:
+  - Ô chọn (`select`) chừa đủ chỗ cho mũi tên ▾ (40px trong form, 36px trong khung lọc); trước đó bị quy tắc chung ghi đè còn 14px, tên dài chạy đè lên mũi tên.
+  - Ô nhập và ô chọn thụt chữ 2px (`text-indent`) để máy có cài Myriad Pro không bị cắt nét trái chữ đầu (vd chữ "T" trong "Tất cả").
+  - Ô nhập trong khung lọc dùng line-height 1.2 như các trang cũ.
+  - `textarea` cao tối thiểu 120px đúng như thiết kế (trước đó bị ép còn 46px).
+  - `.kpis.cols-5` giữ 5 ô trên một hàng ở máy tính bảng, chỉ chia 3 cột trên điện thoại (≤ 760px).
 
 ---
 

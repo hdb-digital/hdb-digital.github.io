@@ -1,11 +1,11 @@
 /*!
- * HDB UI · hdb-ui.css · v1.0.0 (28/10/2026)
+ * HDB UI · hdb-ui.css · v1.1.0 (29/10/2026)
  * Bộ giao diện dùng chung cho các trang trên https://hdb-digital.cloud
  * Theo HDBank Digital Playbook (mục 2.a–2.j) và các trang đang chạy:
  * Digital Hub, Đánh giá Google Maps, Xếp hạng app, Theo dõi follower, Tạo mã QR, Tạo bảng tên.
  *
  * CÁCH DÙNG (đặt trong <head>, sau link Google Fonts):
- *   <link rel="stylesheet" href="https://hdb-digital.cloud/assets/hdb-ui.css?v=1.0">
+ *   <link rel="stylesheet" href="https://hdb-digital.cloud/assets/hdb-ui.css?v=1.1">
  * Hướng dẫn đầy đủ (khung HTML mẫu, bảng tra class, quy tắc): DESIGN.md
  *
  * QUY TẮC SỬA FILE NÀY: file dùng chung cho mọi trang, sửa ở đây là mọi trang đổi theo.
@@ -251,22 +251,24 @@ img { max-width: 100%; height: auto; }
 .icon-btn:hover { background: var(--red-10); color: var(--red); }
 .icon-btn.is-filled { width: 40px; height: 40px; background: var(--grey-10); }
 
-/* ---- Ô nhập & select: mặc định dạng form (bo 14px). Trong .filters tự đổi sang dạng viên thuốc ---- */
-:is(input[type=text], input[type=search], input[type=password], input[type=email], input[type=tel],
+/* ---- Ô nhập & select: mặc định dạng form (bo 14px). Trong .filters tự đổi sang dạng viên thuốc ----
+   :where() giữ độ ưu tiên = 0 để mọi quy tắc riêng (select, .combo input, .date input…) luôn thắng.
+   text-indent 2px (padding trái bớt 2px): máy có cài Myriad Pro bị cắt mất nét trái chữ đầu dòng (vd chữ "T") trong ô nhập. */
+:where(input[type=text], input[type=search], input[type=password], input[type=email], input[type=tel],
     input[type=number], input[type=url], textarea, select) {
   font: 400 16px/1.3 var(--font-body); color: var(--text); background-color: var(--white);
-  border: 1.5px solid var(--line); border-radius: var(--r-field); padding: 11px 14px; min-height: 46px;
+  border: 1.5px solid var(--line); border-radius: var(--r-field); padding: 11px 14px 11px 12px; text-indent: 2px; min-height: 46px;
   max-width: 100%; transition: border-color .2s, box-shadow .2s;
 }
 :is(input, textarea)::placeholder { color: var(--grey-70); opacity: 1; }
-:is(input[type=text], input[type=search], input[type=password], input[type=email], input[type=tel],
+:where(input[type=text], input[type=search], input[type=password], input[type=email], input[type=tel],
     input[type=number], input[type=url], textarea, select):focus {
   outline: none; border-color: var(--red); box-shadow: 0 0 0 4px var(--red-10);
 }
 :is(input, textarea, select)[aria-invalid="true"], :is(input, textarea, select).is-invalid { border-color: var(--red); }
-textarea { min-height: 120px; resize: vertical; line-height: 1.5; }
+textarea { min-height: 120px; resize: vertical; line-height: 1.5; padding-left: 14px; text-indent: 0; } /* nhiều dòng: không thụt dòng đầu */
 select {
-  appearance: none; -webkit-appearance: none; padding-right: 40px; cursor: pointer;
+  appearance: none; -webkit-appearance: none; padding-right: 40px; cursor: pointer;   /* chừa chỗ cho mũi tên ▾ */
   background: var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5.5 8l4.5 4.5L14.5 8' fill='none' stroke='%2358595B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") right 14px center / 16px no-repeat;
 }
 
@@ -497,9 +499,8 @@ details[open] > .collapse-head::after { transform: rotate(180deg); }
   display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px 16px;
   background: var(--white); border-radius: var(--r-lg); padding: 16px 20px; box-shadow: var(--lift);
 }
-.filters :is(input[type=text], input[type=search], select) { border-radius: var(--pill); min-height: 42px; font-size: 15px; padding: 10px 14px; }
+.filters :where(input[type=text], input[type=search], select) { border-radius: var(--pill); min-height: 42px; font-size: 15px; line-height: 1.2; padding: 10px 14px 10px 12px; }
 .filters select { padding-right: 36px; min-width: 132px; background-position: right 12px center; }
-.filters .combo input[type=text], .filters .combo input[type=search] { padding-left: 38px; padding-right: 72px; }
 .f-group { display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: var(--muted); min-width: 0; border: 0; margin: 0; padding: 0; }
 .f-group > legend { padding: 0; margin-bottom: 6px; float: left; width: 100%; }
 .f-group > legend + * { clear: both; }
@@ -510,8 +511,6 @@ details[open] > .collapse-head::after { transform: rotate(180deg); }
 .f-hint { font-size: 13px; font-weight: 400; color: var(--muted); }
 .f-break { flex-basis: 100%; height: 0; }                                          /* xuống hàng trong khung lọc */
 .f-actions { display: flex; align-items: center; gap: 4px; margin-left: auto; }   /* Xóa lọc + Tải Excel ở cuối hàng */
-/* Cố ý lặp lại: ô ngày nằm trong .filters phải giữ dạng không viền, đặt sau quy tắc .filters để thắng */
-.filters .date input[type=text] { border-radius: 0; min-height: 0; padding: 0; font-size: 15px; }
 
 /* ---- Ô KPI ---- */
 .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: var(--gap); }
@@ -861,7 +860,6 @@ ol.points li::before {
    ========================================================================= */
 @media (max-width: 1100px) {
   .f-group.has-sep { border-right: 0; padding-right: 0; }
-  .kpis.cols-5 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .kpis.cols-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 1024px) {
