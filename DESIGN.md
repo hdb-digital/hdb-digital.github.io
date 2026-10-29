@@ -40,7 +40,7 @@ Trong `<head>`, theo đúng thứ tự:
 5. **Thẳng lề:** mọi khối chính (khung lọc, ô KPI, thẻ) cùng mép trái/phải. Lề trong thẻ dùng `var(--pad)` (24px, điện thoại 16px). Không lồng thẻ có padding vào thẻ có padding (lỗi "lề kép").
 6. **Bộ lọc không dính khi cuộn.** Không dùng `position: sticky` cho khung lọc.
 7. **So sánh 2 kỳ:** chỉ hiện **% thay đổi**: tăng `.delta.up` (xanh lá, ▲), giảm `.delta.down` (đỏ, ▼), không đổi xám "0%". Chỉ số "xấu" (số lượt 1★, số lỗi…) thì đảo màu: tăng là đỏ, giảm là xanh.
-8. **Biểu đồ:** xem mục 5. HDBank luôn màu đỏ; tối đa 5 chuỗi; từ 2 chuỗi phải có chú giải; có tooltip khi rê chuột; có "Xem dạng bảng"; không dùng 2 trục tung.
+8. **Biểu đồ:** xem mục 5. HDBank luôn màu đỏ; tối đa 6 chuỗi: HDBank + 5 đối thủ; từ 2 chuỗi phải có chú giải; có tooltip khi rê chuột; có "Xem dạng bảng"; không dùng 2 trục tung.
 9. **Responsive:** kiểm tra ở 1440, 1024, 768 và 390px; trang không được cuộn ngang; bảng rộng đặt trong `.tbl-wrap`.
 10. **Trợ năng:** mọi ô nhập có `<label>`; nút chỉ có icon có `aria-label`; nút bật/tắt dùng `aria-pressed`; không dùng màu làm tín hiệu duy nhất (luôn kèm chữ, ▲▼ hoặc icon).
 
@@ -490,6 +490,7 @@ Email nhận đề xuất: `digitalwebsite@hdbank.com.vn` (form mở email soạ
 | `--c2` | cam | đối thủ 2, kèm **nét đứt** |
 | `--c3` | xám 70% | đối thủ 3, kèm **nét chấm** |
 | `--c4` | cam vàng | đối thủ 4 |
+| `--c1` | xám | đối thủ 5, kèm **nét gạch dài** |
 | `--c-rest` | xám 30% | các đối tượng còn lại khi chỉ làm nổi HDBank |
 | `--s5`…`--s1` | đỏ, cam, xám 30/70/100% | thang số sao 5★ → 1★ |
 
@@ -497,7 +498,7 @@ Bảng màu thương hiệu **không đạt** kiểm định màu cho biểu đ�
 - Ưu tiên kiểu "**HDBank đỏ, còn lại xám**" (`--c-hd` + `--c-rest`) khi chỉ cần so HDBank với thị trường.
 - Từ 2 chuỗi: luôn có `.legend`; ≤ 4 chuỗi thì ghi nhãn trực tiếp ở cuối đường/cột; phân biệt thêm bằng nét đứt/chấm.
 - Mọi biểu đồ có tooltip khi rê chuột và có `details.disclosure` "Xem dạng bảng".
-- Tối đa 5 chuỗi; nhiều hơn thì gộp "Khác" hoặc tách nhiều biểu đồ nhỏ. Không dùng 2 trục tung.
+- Tối đa 6 chuỗi: HDBank + 5 đối thủ; nhiều hơn thì gộp "Khác" hoặc tách nhiều biểu đồ nhỏ. Không dùng 2 trục tung.
 - Nét: đường 2px, thanh mảnh có góc bo 4px ở đầu, lưới và trục nhạt (`--grid`, `--axis`). Chữ trong biểu đồ dùng màu chữ, không dùng màu chuỗi.
 
 ---
