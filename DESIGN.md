@@ -1,6 +1,6 @@
 # HDB UI · Hướng dẫn dựng trang cho hdb-digital.cloud
 
-Phiên bản 1.1 · 29/10/2026 · đi kèm `hdb-ui.css` v1.1
+Phiên bản 1.2 · 30/10/2026 · đi kèm `hdb-ui.css` v1.2 và `hdb-nav.js` v1.2
 Dành cho AI (Claude Code…) và người dựng trang mới trên HDB Digital Hub. **Đọc hết file này trước khi viết code.**
 
 Mục tiêu: mọi trang mới trông như cùng một sản phẩm với các trang đang chạy (Digital Hub, Đánh giá Google Maps, Xếp hạng app, Theo dõi follower, Tạo mã QR, Tạo bảng tên), đúng HDBank Digital Playbook (mục 2.a–2.j).
@@ -17,12 +17,14 @@ Trong `<head>`, theo đúng thứ tự:
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap">
-<link rel="stylesheet" href="https://hdb-digital.cloud/assets/hdb-ui.css?v=1.1">
+<link rel="stylesheet" href="https://hdb-digital.cloud/assets/hdb-ui.css?v=1.2">
 <style>
   /* Chỉ CSS riêng của trang này (thành phần chưa có trong hdb-ui.css) */
 </style>
 ```
 
+- Menu công cụ trong header do file dùng chung `hdb-nav.js` dựng (xem 3.1). Nạp ở cuối `<body>`:
+  `<script src="https://hdb-digital.cloud/assets/hdb-nav.js?v=1.2" defer></script>`
 - Luôn dùng **đường dẫn tuyệt đối** `https://hdb-digital.cloud/assets/...` cho CSS, logo, favicon, để mở thử bằng file trên máy vẫn hiện đúng.
 - CSS riêng của trang: đặt tên class mới, **không định nghĩa lại** class có trong `hdb-ui.css`. Cần biến thể thì thêm class bổ sung (vd `.tile.is-xyz`) trong `<style>` của trang.
 - Thành phần dùng được ở nhiều trang thì đề xuất đưa vào `hdb-ui.css` (xem mục 8), không chép qua lại giữa các trang.
@@ -86,14 +88,9 @@ Trong `<head>`, theo đúng thứ tự:
       <img class="brand-logo" src="https://hdb-digital.cloud/assets/logo.png" alt="HDBank" width="113" height="30">
       <span class="brand-name">Digital Hub</span>
     </a>
-    <nav class="nav" aria-label="Công cụ">
-      <!-- Đủ các công cụ đang hoạt động, đúng thứ tự này; trang hiện tại có aria-current="page" -->
-      <a href="/ggmap-dashboard/">Đánh giá<span class="long"> Google Maps</span></a>
-      <a href="/app-ranking/"><span class="long">Xếp hạng app</span><span class="short">Xếp hạng</span></a>
-      <a href="/social-follower/"><span class="long">Theo dõi follower</span><span class="short">Follower</span></a>
-      <a href="/ggmap-qrcode/"><span class="long">Tạo mã QR</span><span class="short">Mã QR</span></a>
-      <a href="/bang-ten/"><span class="long">Tạo bảng tên</span><span class="short">Bảng tên</span></a>
-    </nav>
+    <!-- Để trống: hdb-nav.js tự dựng menu từ danh sách chung và đánh dấu trang đang mở.
+         Đủ chỗ thì hiện hàng link; chật (điện thoại, máy tính bảng, nhiều công cụ) thì gộp thành nút "Công cụ" -->
+    <nav class="nav" data-hdb-nav aria-label="Công cụ"></nav>
   </div>
 </header>
 
@@ -122,6 +119,7 @@ Trong `<head>`, theo đúng thứ tự:
   </div>
   <div class="footer-band" aria-hidden="true"></div>
 </footer>
+<script src="https://hdb-digital.cloud/assets/hdb-nav.js?v=1.2" defer></script>
 </body>
 </html>
 ```
@@ -421,7 +419,8 @@ Email nhận đề xuất: `digitalwebsite@hdbank.com.vn` (form mở email soạ
 | Khung nội dung | `.wrap` | rộng tối đa 1240px, lề hai bên tự co |
 | Xếp khối dọc | `.stack` | các con cách nhau 16px (điện thoại 12px) |
 | Header | `.site-header > .wrap.header-inner > .brand + .nav` | trang giới thiệu thêm `.is-sticky` |
-| Menu nhãn dài/ngắn | `<span class="long">` / `<span class="short">` | điện thoại hiện `.short` |
+| Menu công cụ | `<nav class="nav" data-hdb-nav>` + `hdb-nav.js` | JS dựng `.nav-links` hoặc nút `.nav-toggle` + `.nav-panel` (`.nav-group`, `.nav-item`, `.nav-home`); không viết tay |
+| Menu tự viết (trang giới thiệu) | `.nav > a` (`.long` / `.short` cho nhãn dài/ngắn) | dùng cho link neo trong trang, vd trang chủ |
 | Hero công cụ | `.hero > .wrap.hero-inner` + `.hero-icon`, `h1`, `.hero-lead`, `.hero-meta` | `.no-overlap` khi không có khối đè |
 | Hero lớn | `.hero.hero-xl` + `.hero-actions`, `.hero-aside` | trang giới thiệu |
 | Icon cấp 1 | `.icon1` (+ `style="--s:64px"`) | glyph trắng 48×48, nhãn ≤ 20 ký tự |
@@ -438,7 +437,7 @@ Email nhận đề xuất: `digitalwebsite@hdbank.com.vn` (form mở email soạ
 | Chọn nhiều (tối đa 5 đối thủ) | `.pop-wrap > .popover` + `.pop-quick`, `.pick-list`, `.pop-foot` | |
 | Khung lọc | `.filter-dock > .wrap > .filters` + `.f-group` (`.has-sep`, `.grow`, `.full`), `.f-cap`, `.f-err`, `.f-break`, `.f-actions` | không sticky |
 | Ô KPI | `.kpis` (`.cols-2`…`.cols-5`) > `.tile` (`.is-main`, `.is-outline`) + `.lab`, `.row`, `.val`, `.unit`, `.foot` | |
-| Thay đổi % | `.delta.up` / `.delta.down` / `.delta` | kèm ▲ ▼ và `aria-label` |
+| Thay đổi % | `.delta.up` / `.delta.down` / `.delta` | kèm ▲ ▼ và `aria-label`; trong ô bảng tự theo cỡ chữ của bảng |
 | Thang sao | `.meter > .meter-bg + .meter-fg` (5 `<svg><use href="#star"/></svg>` mỗi lớp) | `.meter-fg` đặt `width` theo % |
 | Thẻ | `.card` + `.card-head > h2 + .card-sub + .card-actions` | |
 | Panel nổi | `.panel` + `.panel-body` | |
@@ -457,8 +456,8 @@ Email nhận đề xuất: `digitalwebsite@hdbank.com.vn` (form mở email soạ
 | Ghi chú nguồn | `.source-note` | cuối trang dashboard |
 | Mật khẩu | `body.locked`, `.gate > .wrap > .card.gate-card` | |
 | Đánh giá | `.reviews > .review` + `.review-head`, `.review-stars`, `.who`, `time`, `.review-meta`, `.review-text`, `.review-reply`, `.review-noreply`; `.more-row` | |
-| Khu làm việc | `.workspace > .panel.ws-form + .panel.ws-actions + .panel.ws-preview` | |
-| Các bước | `ol.step-list > li.step > .step-num + .step-head` | |
+| Khu làm việc | `.workspace > .panel.ws-form + .panel.ws-actions + .panel.ws-preview` | ấn phẩm khổ ngang (bảng tên, banner): `.workspace.is-landscape`, điện thoại đưa xem trước lên đầu và dính khi cuộn |
+| Các bước | `ol.step-list > li.step > .step-num + .step-head` | `.step-head` đặt được công tắc/link bên phải tiêu đề |
 | Chọn mẫu | `.choices > button.choice[aria-pressed]` | |
 | Tải ảnh lên | `label.drop` (`.is-over` khi kéo), `.file-row` | |
 | Xem trước | `.preview-head`, `.stage > .paper`, `.tags`, `.tips` | |
@@ -541,15 +540,15 @@ Icon dán một lần vào `<svg class="sprite" aria-hidden="true">` đầu `<bo
 ## 7. Đưa trang mới lên Digital Hub
 
 1. Tạo repo `hdb-digital/<ten-cong-cu>` (chữ thường, gạch nối), bật GitHub Pages → trang chạy tại `https://hdb-digital.cloud/<ten-cong-cu>/`.
-2. Thêm link vào `.nav` của **tất cả** các trang công cụ (giữ thứ tự: dashboard trước, công cụ tạo ấn phẩm sau).
+2. Thêm công cụ vào mảng `TOOLS` trong `assets/hdb-nav.js` của repo `hdb-digital.github.io` (`group`, `name`, `url`, `glyph`; giữ thứ tự: dashboard trước, công cụ tạo ấn phẩm sau). Menu của mọi trang tự cập nhật, không phải sửa từng trang.
 3. Thêm công cụ vào mảng `TOOLS` trong `index.html` của repo `hdb-digital.github.io` (trang chủ): `status` (`live` / `internal` / `building`), `group` (`monitor` = dashboard, `print` = tạo ấn phẩm), `name`, `label` (≤ 20 ký tự), `glyph`, `url`, `cta`, `lead`, `features` hoặc `steps`, `audience`, `note`. Trang chủ tự hiện ở khung mở nhanh, danh sách công cụ và footer.
-4. Glyph mới cho icon cấp 1: thêm `<symbol id="g-...">` vào sprite của trang chủ và của trang công cụ.
+4. Glyph mới cho icon cấp 1: thêm `<symbol id="g-...">` vào sprite của trang chủ và của trang công cụ, và thêm cùng đường vẽ vào `GLYPHS` trong `hdb-nav.js`.
 
 ---
 
-## 8. Sửa `hdb-ui.css`
+## 8. Sửa `hdb-ui.css` và `hdb-nav.js`
 
-File nằm ở `assets/hdb-ui.css` trong repo `hdb-digital.github.io`; mọi trang dùng chung, nên:
+Hai file nằm ở `assets/` trong repo `hdb-digital.github.io`; mọi trang dùng chung, nên (áp dụng cho cả hai file):
 - **Được làm:** thêm class/biến mới, sửa lỗi hiển thị không làm đổi bố cục trang đang chạy → tăng số phụ (1.0 → 1.1) ở đầu file và trong `?v=` của trang mới; ghi thay đổi vào mục "Nhật ký" dưới đây.
 - **Không làm:** đổi tên, xóa hoặc đổi hẳn kiểu của class đang dùng. Cần thay đổi lớn thì tạo `hdb-ui-v2.css` và chuyển dần từng trang.
 - Trước khi đẩy lên: mở thử ít nhất một trang dashboard và một trang công cụ đang dùng file này ở 1440px và 390px.
@@ -562,6 +561,12 @@ File nằm ở `assets/hdb-ui.css` trong repo `hdb-digital.github.io`; mọi tra
   - Ô nhập trong khung lọc dùng line-height 1.2 như các trang cũ.
   - `textarea` cao tối thiểu 120px đúng như thiết kế (trước đó bị ép còn 46px).
   - `.kpis.cols-5` giữ 5 ô trên một hàng ở máy tính bảng, chỉ chia 3 cột trên điện thoại (≤ 760px).
+- **1.2** (30/10/2026), thêm mới, không đổi tên class đang dùng:
+  - Menu công cụ dùng chung `hdb-nav.js` + `<nav class="nav" data-hdb-nav>`: một danh sách cho mọi trang; tự gộp thành nút "Công cụ" khi không đủ chỗ (sửa lỗi menu bị khuất trên điện thoại).
+  - `.delta` trong ô bảng theo cỡ chữ của bảng.
+  - `.step-head` đặt được công tắc/link bên phải.
+  - `.notice`: link dài tự xuống dòng; các thông báo liền nhau cách 8px.
+  - `.workspace.is-landscape` cho ấn phẩm khổ ngang: khung xem trước thấp, ảnh rộng hết khung; điện thoại đưa xem trước lên đầu và dính khi cuộn.
 
 ---
 
